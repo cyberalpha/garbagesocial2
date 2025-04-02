@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Trash2, Filter, Leaf, FileText, Wine, Inbox, Hammer, Heartbeat, AlertTriangle } from 'lucide-react';
+import { Trash2, Filter, Leaf, FileText, Wine, Inbox, Hammer, Heart, AlertTriangle } from 'lucide-react';
 import { WasteCategory } from '../types';
 
 interface CategoryFilterProps {
@@ -16,7 +16,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ selectedCategories, onC
     { value: 'glass', label: 'Vidrio', icon: <Wine size={16} />, color: 'bg-waste-glass' },
     { value: 'plastic', label: 'Plástico', icon: <Inbox size={16} />, color: 'bg-waste-plastic' },
     { value: 'metal', label: 'Metal', icon: <Hammer size={16} />, color: 'bg-waste-metal' },
-    { value: 'sanitary', label: 'Control Sanitario', icon: <Heartbeat size={16} />, color: 'bg-waste-sanitary' },
+    { value: 'sanitary', label: 'Control Sanitario', icon: <Heart size={16} />, color: 'bg-waste-sanitary' },
     { value: 'dump', label: 'Basurales', icon: <AlertTriangle size={16} />, color: 'bg-waste-dump' },
     { value: 'various', label: 'Varios', icon: <Trash2 size={16} />, color: 'bg-waste-various' },
   ];
