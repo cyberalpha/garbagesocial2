@@ -12,6 +12,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Profile from "./pages/Profile";
 import NewPost from "./pages/NewPost";
+import Map from "./pages/Map";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
                 <NewPost />
               </ProtectedRoute>
             } />
+            <Route path="/map" element={<Map />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

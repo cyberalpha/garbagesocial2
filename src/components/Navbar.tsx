@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from "@/components/ui/button";
-import { Recycle, MapPin, UserCircle, Plus, LogOut } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   DropdownMenu,
@@ -11,106 +11,129 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+} from '@/components/ui/dropdown-menu';
+import { RecycleIcon, Menu, X, LogOut, User } from 'lucide-react';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useMobile } from '@/hooks/use-mobile';
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
   const { user, profile, signOut } = useAuth();
+  const isMobile = useMobile();
+  const location = useLocation();
   
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map(part => part[0])
-      .join('')
-      .toUpperCase()
-      .substring(0, 2);
-  };
+  const isActive = (path: string) => location.pathname === path;
+
+  const navLinks = [
+    { name: 'Inicio', path: '/' },
+    { name: 'Mapa', path: '/map' },
+    { name: 'Acerca de', path: '/about' },
+  ];
+  
+  const renderNavLinks = () => (
+    <>
+      {navLinks.map((link) => (
+        <Link
+          key={link.path}
+          to={link.path}
+          className={`text-sm font-medium transition-colors hover:text-white/90 ${
+            isActive(link.path) 
+              ? 'text-white' 
+              : 'text-white/70'
+          }`}
+        >
+          {link.name}
+        </Link>
+      ))}
+    </>
+  );
 
   return (
-    <nav className="navbar-gradient border-b sticky top-0 z-50 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2">
-              <Recycle size={24} />
-              <span className="font-bold text-xl">Garbage Social</span>
-            </Link>
-            <div className="hidden md:block ml-10">
-              <div className="flex items-center space-x-4">
-                <Link to="/" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white/20 transition duration-150">
-                  Inicio
-                </Link>
-                <Link to="/map" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white/20 transition duration-150">
-                  Mapa
-                </Link>
-                <Link to="/about" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white/20 transition duration-150">
-                  Acerca de
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center space-x-2">
-            {user ? (
-              <>
-                <Link to="/new-post">
-                  <Button variant="outline" size="sm" className="bg-white text-primary hover:bg-gray-100">
-                    <Plus size={18} className="mr-1" />
-                    Publicar
+    <header className="sticky top-0 z-50 w-full bg-gradient-to-r from-cyan-600 to-green-600 shadow-md">
+      <div className="container flex h-16 items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link to="/" className="flex items-center gap-2">
+            <RecycleIcon className="h-6 w-6 text-white" />
+            <span className="text-lg font-bold text-white">EcoResiduos</span>
+          </Link>
+          
+          {!isMobile && (
+            <nav className="hidden md:flex items-center gap-6 ml-6">
+              {renderNavLinks()}
+            </nav>
+          )}
+        </div>
+
+        <div className="flex items-center gap-4">
+          {user ? (
+            <div className="flex items-center gap-4">
+              <Button 
+                variant="secondary" 
+                size={isMobile ? "sm" : "default"} 
+                asChild
+                className="bg-white/20 text-white hover:bg-white/30 hover:text-white"
+              >
+                <Link to="/new-post">Publicar Residuo</Link>
+              </Button>
+              
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="rounded-full h-8 w-8 p-0 overflow-hidden hover:bg-white/20"
+                  >
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={profile?.avatar_url || ""} />
+                      <AvatarFallback className="text-xs bg-white/20 text-white">
+                        {profile?.name?.split(' ').map(part => part[0]).join('').toUpperCase().substring(0, 2) || 'U'}
+                      </AvatarFallback>
+                    </Avatar>
                   </Button>
-                </Link>
-                
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="rounded-full text-white hover:bg-white/20">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={profile?.avatar_url} />
-                        <AvatarFallback>{profile ? getInitials(profile.name) : 'U'}</AvatarFallback>
-                      </Avatar>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link to="/profile" className="cursor-pointer">
-                        <UserCircle className="mr-2 h-4 w-4" />
-                        <span>Perfil</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => signOut()}>
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>Cerrar sesión</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </>
-            ) : (
-              <Link to="/auth">
-                <Button variant="outline" size="sm" className="bg-white text-primary hover:bg-gray-100">
-                  Iniciar sesión
-                </Button>
-              </Link>
-            )}
-          </div>
-        </div>
-      </div>
-      <div className="md:hidden bg-white text-primary">
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100">
-            Inicio
-          </Link>
-          <Link to="/map" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100">
-            <div className="flex items-center">
-              <MapPin size={18} className="mr-2" />
-              Mapa
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Perfil</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={signOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Cerrar sesión</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
-          </Link>
-          <Link to="/about" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100">
-            Acerca de
-          </Link>
+          ) : (
+            <Button 
+              variant="secondary" 
+              size={isMobile ? "sm" : "default"}
+              asChild
+              className="bg-white/20 text-white hover:bg-white/30 hover:text-white"
+            >
+              <Link to="/auth">Iniciar sesión</Link>
+            </Button>
+          )}
+          
+          {isMobile && (
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden text-white">
+                  <Menu />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="bg-gradient-to-r from-cyan-600 to-green-600 text-white border-none">
+                <nav className="flex flex-col gap-4 mt-8">
+                  {renderNavLinks()}
+                </nav>
+              </SheetContent>
+            </Sheet>
+          )}
         </div>
       </div>
-    </nav>
+    </header>
   );
 };
 

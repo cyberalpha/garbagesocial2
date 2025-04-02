@@ -45,3 +45,13 @@ export interface User {
     neutral: number;
   };
 }
+
+export interface Profile {
+  id: string;
+  name: string;
+  type: 'individual' | 'organization';
+  avatar_url?: string;
+  positive_ratings?: number;
+  negative_ratings?: number;
+  neutral_ratings?: number;
+}

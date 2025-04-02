@@ -1,17 +1,83 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { mockPosts } from '../data/mockData';
 import PostCard from '@/components/PostCard';
 import CategoryFilter from '@/components/CategoryFilter';
-import { WasteCategory } from '../types';
+import { WasteCategory, Post } from '../types';
 import { Recycle, Search, ArrowRight } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/components/ui/use-toast';
 
 const Index: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<WasteCategory[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const fetchPosts = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('posts')
+        .select(`
+          id, 
+          title, 
+          description, 
+          category, 
+          address,
+          lat,
+          lng,
+          status, 
+          image_url,
+          created_at,
+          user_id,
+          profiles:user_id (name, avatar_url)
+        `)
+        .eq('status', 'available')
+        .order('created_at', { ascending: false });
+        
+      if (error) {
+        throw error;
+      }
+
+      if (data) {
+        const formattedPosts = data.map(post => ({
+          id: post.id,
+          userId: post.user_id,
+          username: post.profiles?.name || 'Usuario',
+          userAvatar: post.profiles?.avatar_url || '',
+          category: post.category as WasteCategory,
+          title: post.title,
+          description: post.description || '',
+          imageUrl: post.image_url || undefined,
+          location: {
+            lat: post.lat,
+            lng: post.lng,
+            address: post.address
+          },
+          createdAt: post.created_at,
+          status: 'available' as const
+        }));
+        
+        setPosts(formattedPosts);
+      }
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      toast({
+        title: 'Error',
+        description: 'No se pudieron cargar las publicaciones',
+        variant: 'destructive'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleCategoryToggle = (category: WasteCategory) => {
     if (selectedCategories.includes(category)) {
@@ -21,7 +87,7 @@ const Index: React.FC = () => {
     }
   };
 
-  const filteredPosts = mockPosts.filter(post => {
+  const filteredPosts = posts.filter(post => {
     const matchesSearch = searchTerm === '' || 
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
       post.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -107,7 +173,12 @@ const Index: React.FC = () => {
       <section className="py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold mb-6">Residuos Disponibles</h2>
-          {filteredPosts.length > 0 ? (
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto"></div>
+              <p className="mt-4 text-gray-500">Cargando publicaciones...</p>
+            </div>
+          ) : filteredPosts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredPosts.map(post => (
                 <PostCard key={post.id} post={post} />

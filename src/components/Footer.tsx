@@ -1,102 +1,126 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Recycle, Twitter, Facebook, Instagram, Github } from 'lucide-react';
+import { RecycleIcon, Mail, Phone, MapPin, Github, Twitter, Facebook, Instagram } from 'lucide-react';
 
-const Footer: React.FC = () => {
+const Footer = () => {
   return (
-    <footer className="footer-gradient border-t">
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="col-span-1">
-            <div className="flex items-center space-x-2">
-              <Recycle size={24} className="text-primary" />
-              <span className="font-bold text-xl">Garbage Social</span>
-            </div>
-            <p className="mt-2 text-sm text-gray-500">
-              Tu basura es nuestro tesoro.
-            </p>
-            <div className="mt-4 flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-primary">
-                <Twitter size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-primary">
-                <Facebook size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-primary">
-                <Instagram size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-primary">
-                <Github size={20} />
-              </a>
-            </div>
+    <footer className="bg-gradient-to-r from-cyan-600 to-green-600 text-white">
+      <div className="container py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div>
+          <div className="flex items-center gap-2 mb-4">
+            <RecycleIcon className="h-6 w-6" />
+            <span className="text-xl font-bold">EcoResiduos</span>
           </div>
-          <div className="col-span-1">
-            <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase">
-              Sobre Nosotros
-            </h3>
-            <ul className="mt-4 space-y-2">
-              <li>
-                <Link to="/about" className="text-sm text-gray-500 hover:text-primary">
-                  Acerca de
-                </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="text-sm text-gray-500 hover:text-primary">
-                  Contacto
-                </Link>
-              </li>
-              <li>
-                <Link to="/impact" className="text-sm text-gray-500 hover:text-primary">
-                  Impacto Ambiental
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div className="col-span-1">
-            <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase">
-              Recursos
-            </h3>
-            <ul className="mt-4 space-y-2">
-              <li>
-                <Link to="/guide" className="text-sm text-gray-500 hover:text-primary">
-                  Guía de Reciclaje
-                </Link>
-              </li>
-              <li>
-                <Link to="/faq" className="text-sm text-gray-500 hover:text-primary">
-                  Preguntas Frecuentes
-                </Link>
-              </li>
-              <li>
-                <Link to="/blog" className="text-sm text-gray-500 hover:text-primary">
-                  Blog
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div className="col-span-1">
-            <h3 className="text-sm font-semibold text-gray-900 tracking-wider uppercase">
-              Legal
-            </h3>
-            <ul className="mt-4 space-y-2">
-              <li>
-                <Link to="/privacy" className="text-sm text-gray-500 hover:text-primary">
-                  Política de Privacidad
-                </Link>
-              </li>
-              <li>
-                <Link to="/terms" className="text-sm text-gray-500 hover:text-primary">
-                  Términos de Uso
-                </Link>
-              </li>
-            </ul>
+          <p className="text-white/80 mb-4">
+            Conectando personas que tienen desechos con quienes pueden reciclarlos y darles una segunda vida.
+          </p>
+          <div className="flex space-x-4">
+            <a href="https://twitter.com" aria-label="Twitter" className="text-white/80 hover:text-white">
+              <Twitter size={20} />
+            </a>
+            <a href="https://facebook.com" aria-label="Facebook" className="text-white/80 hover:text-white">
+              <Facebook size={20} />
+            </a>
+            <a href="https://instagram.com" aria-label="Instagram" className="text-white/80 hover:text-white">
+              <Instagram size={20} />
+            </a>
+            <a href="https://github.com" aria-label="GitHub" className="text-white/80 hover:text-white">
+              <Github size={20} />
+            </a>
           </div>
         </div>
-        <div className="mt-8 border-t border-gray-200 pt-8">
-          <p className="text-center text-xs text-gray-400">
-            &copy; {new Date().getFullYear()} Garbage Social. Todos los derechos reservados.
+        
+        <div>
+          <h3 className="font-semibold text-lg mb-4">Navegación</h3>
+          <ul className="space-y-2">
+            <li>
+              <Link to="/" className="text-white/80 hover:text-white">
+                Inicio
+              </Link>
+            </li>
+            <li>
+              <Link to="/about" className="text-white/80 hover:text-white">
+                Acerca de
+              </Link>
+            </li>
+            <li>
+              <Link to="/map" className="text-white/80 hover:text-white">
+                Mapa de residuos
+              </Link>
+            </li>
+            <li>
+              <Link to="/new-post" className="text-white/80 hover:text-white">
+                Publicar residuo
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 className="font-semibold text-lg mb-4">Recursos</h3>
+          <ul className="space-y-2">
+            <li>
+              <a href="#" className="text-white/80 hover:text-white">
+                Guía de reciclaje
+              </a>
+            </li>
+            <li>
+              <a href="#" className="text-white/80 hover:text-white">
+                Tipos de residuos
+              </a>
+            </li>
+            <li>
+              <a href="#" className="text-white/80 hover:text-white">
+                Puntos de acopio
+              </a>
+            </li>
+            <li>
+              <a href="#" className="text-white/80 hover:text-white">
+                Blog
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 className="font-semibold text-lg mb-4">Contacto</h3>
+          <ul className="space-y-3">
+            <li className="flex items-start">
+              <MapPin size={18} className="mr-2 mt-0.5" />
+              <span className="text-white/80">
+                Santiago, Chile
+              </span>
+            </li>
+            <li className="flex items-start">
+              <Phone size={18} className="mr-2 mt-0.5" />
+              <span className="text-white/80">
+                +56 2 2123 4567
+              </span>
+            </li>
+            <li className="flex items-start">
+              <Mail size={18} className="mr-2 mt-0.5" />
+              <span className="text-white/80">
+                info@ecoresiduos.cl
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="border-t border-white/20">
+        <div className="container py-6 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-white/80 text-sm">
+            © 2024 EcoResiduos. Todos los derechos reservados.
           </p>
+          <div className="flex gap-4 mt-4 md:mt-0">
+            <a href="#" className="text-sm text-white/80 hover:text-white">
+              Términos de Uso
+            </a>
+            <a href="#" className="text-sm text-white/80 hover:text-white">
+              Política de Privacidad
+            </a>
+          </div>
         </div>
       </div>
     </footer>
