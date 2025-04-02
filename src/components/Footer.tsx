@@ -10,7 +10,7 @@ const Footer = () => {
         <div>
           <div className="flex items-center gap-2 mb-4">
             <RecycleIcon className="h-6 w-6" />
-            <span className="text-xl font-bold">GarbageSocial</span>
+            <span className="text-xl font-bold">Garbage Social</span>
           </div>
           <p className="text-white/80 mb-4">
             Conectamos residuos con Recicladores.

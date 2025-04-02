@@ -53,7 +53,7 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-2">
             <RecycleIcon className="h-6 w-6 text-white" />
-            <span className="text-lg font-bold text-white">EcoResiduos</span>
+            <span className="text-lg font-bold text-white">Garbage Social</span>
           </Link>
           
           {!isMobile && (
