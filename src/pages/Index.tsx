@@ -37,7 +37,7 @@ const Index: React.FC = () => {
           image_url,
           created_at,
           user_id,
-          profiles:user_id (name, avatar_url)
+          profiles:user_id(name, avatar_url)
         `)
         .eq('status', 'available')
         .order('created_at', { ascending: false });

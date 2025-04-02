@@ -14,11 +14,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { RecycleIcon, Menu, X, LogOut, User } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Navbar = () => {
   const { user, profile, signOut } = useAuth();
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
   const location = useLocation();
   
   const isActive = (path: string) => location.pathname === path;
