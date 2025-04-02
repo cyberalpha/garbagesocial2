@@ -82,7 +82,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
     window.initMap = initMap;
     
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBNLrJhOMz6idD05pzwk17_zwu1wBakFg4&callback=initMap&libraries=places,geometry`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDw-oZruoaJzPckh5ZE2wpJBblpWSuYdUQ&callback=initMap&libraries=places,geometry`;
     script.async = true;
     script.defer = true;
     document.head.appendChild(script);

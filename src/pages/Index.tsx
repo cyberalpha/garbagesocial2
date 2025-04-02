@@ -6,19 +6,26 @@ import { Input } from '@/components/ui/input';
 import PostCard from '@/components/PostCard';
 import CategoryFilter from '@/components/CategoryFilter';
 import { WasteCategory, Post } from '../types';
-import { Recycle, Search, ArrowRight } from 'lucide-react';
+import { Recycle, Search, ArrowRight, LogIn } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Index: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<WasteCategory[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
-    fetchPosts();
-  }, []);
+    if (user) {
+      fetchPosts();
+    } else {
+      setPosts([]);
+      setLoading(false);
+    }
+  }, [user]);
 
   const fetchPosts = async () => {
     setLoading(true);
@@ -45,7 +52,7 @@ const Index: React.FC = () => {
         throw error;
       }
 
-      // Fetch profiles in a separate query to avoid relationship confusion
+      // Fetch profiles in a separate query
       if (data && data.length > 0) {
         const userIds = [...new Set(data.map(post => post.user_id))];
         
@@ -129,20 +136,33 @@ const Index: React.FC = () => {
               Conectamos a personas que tienen desechos con quienes pueden reciclarlos y darles una segunda vida.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                size="lg" 
-                className="bg-white text-primary hover:bg-gray-100"
-                asChild
-              >
-                <a href="/new-post">Publicar Residuo</a>
-              </Button>
+              {user ? (
+                <Button 
+                  size="lg" 
+                  className="bg-white text-primary hover:bg-gray-100"
+                  asChild
+                >
+                  <a href="/new-post">Publicar Residuo</a>
+                </Button>
+              ) : (
+                <Button 
+                  size="lg" 
+                  className="bg-white text-primary hover:bg-gray-100"
+                  asChild
+                >
+                  <a href="/auth">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Iniciar Sesión
+                  </a>
+                </Button>
+              )}
               <Button 
                 size="lg" 
                 variant="outline" 
                 className="border-white text-white hover:bg-white/20"
                 asChild
               >
-                <a href="/map">Ver Mapa</a>
+                <a href={user ? "/map" : "/auth"}>Ver Mapa</a>
               </Button>
             </div>
           </div>
@@ -154,71 +174,100 @@ const Index: React.FC = () => {
         </div>
       </section>
 
-      {/* Search and Filter Section */}
-      <section className="py-8 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-            <div className="relative w-full md:w-1/2">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-              <Input
-                type="text"
-                placeholder="Buscar por título, descripción o ubicación..."
-                className="w-full pl-10"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+      {user ? (
+        <>
+          {/* Search and Filter Section */}
+          <section className="py-8 bg-gray-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                <div className="relative w-full md:w-1/2">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                  <Input
+                    type="text"
+                    placeholder="Buscar por título, descripción o ubicación..."
+                    className="w-full pl-10"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+                <Button 
+                  variant="link" 
+                  className="text-primary flex items-center"
+                  asChild
+                >
+                  <a href="/map">
+                    Ver todos en el mapa
+                    <ArrowRight size={16} className="ml-1" />
+                  </a>
+                </Button>
+              </div>
+              
+              <CategoryFilter
+                selectedCategories={selectedCategories}
+                onCategoryToggle={handleCategoryToggle}
               />
             </div>
-            <Button 
-              variant="link" 
-              className="text-primary flex items-center"
-              asChild
-            >
-              <a href="/map">
-                Ver todos en el mapa
-                <ArrowRight size={16} className="ml-1" />
-              </a>
-            </Button>
-          </div>
-          
-          <CategoryFilter
-            selectedCategories={selectedCategories}
-            onCategoryToggle={handleCategoryToggle}
-          />
-        </div>
-      </section>
+          </section>
 
-      {/* Posts List */}
-      <section className="py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold mb-6">Residuos Disponibles</h2>
-          {loading ? (
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto"></div>
-              <p className="mt-4 text-gray-500">Cargando publicaciones...</p>
+          {/* Posts List */}
+          <section className="py-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 className="text-2xl font-bold mb-6">Residuos Disponibles</h2>
+              {loading ? (
+                <div className="text-center py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto"></div>
+                  <p className="mt-4 text-gray-500">Cargando publicaciones...</p>
+                </div>
+              ) : filteredPosts.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredPosts.map(post => (
+                    <PostCard key={post.id} post={post} />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <p className="text-gray-500">No se encontraron resultados que coincidan con tu búsqueda.</p>
+                  <Button 
+                    variant="link" 
+                    className="text-primary mt-2"
+                    onClick={() => {
+                      setSearchTerm('');
+                      setSelectedCategories([]);
+                    }}
+                  >
+                    Limpiar filtros
+                  </Button>
+                </div>
+              )}
             </div>
-          ) : filteredPosts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredPosts.map(post => (
-                <PostCard key={post.id} post={post} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <p className="text-gray-500">No se encontraron resultados que coincidan con tu búsqueda.</p>
+          </section>
+        </>
+      ) : (
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl font-bold mb-4">Red social exclusiva para usuarios registrados</h2>
+            <p className="text-xl text-gray-600 mb-8 md:w-2/3 mx-auto">
+              Para acceder a todas las características de la aplicación, incluyendo la visualización de residuos disponibles, es necesario iniciar sesión.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
-                variant="link" 
-                className="text-primary mt-2"
-                onClick={() => {
-                  setSearchTerm('');
-                  setSelectedCategories([]);
-                }}
+                size="lg"
+                className="bg-primary hover:bg-primary/90"
+                asChild
               >
-                Limpiar filtros
+                <a href="/auth">Iniciar Sesión</a>
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline"
+                asChild
+              >
+                <a href="/about">Saber Más</a>
               </Button>
             </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       {/* Call to Action */}
       <section className="py-16 bg-gray-50">
@@ -233,7 +282,7 @@ const Index: React.FC = () => {
               className="bg-primary hover:bg-primary/90"
               asChild
             >
-              <a href="/signup">Regístrate Ahora</a>
+              <a href="/auth">Regístrate Ahora</a>
             </Button>
             <Button 
               size="lg" 

@@ -37,7 +37,11 @@ const App = () => (
                 <NewPost />
               </ProtectedRoute>
             } />
-            <Route path="/map" element={<Map />} />
+            <Route path="/map" element={
+              <ProtectedRoute>
+                <Map />
+              </ProtectedRoute>
+            } />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

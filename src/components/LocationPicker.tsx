@@ -102,8 +102,8 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange }) => {
     window.initMap = initMap;
     
     const script = document.createElement('script');
-    // Nota: En un entorno real, deberías usar una API key propia
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBNLrJhOMz6idD05pzwk17_zwu1wBakFg4&callback=initMap`;
+    // Actualizada la API key proporcionada
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDw-oZruoaJzPckh5ZE2wpJBblpWSuYdUQ&callback=initMap`;
     script.async = true;
     script.defer = true;
     document.head.appendChild(script);
