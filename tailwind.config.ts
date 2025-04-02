@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,17 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Garbage categories colors
+				waste: {
+					organic: '#4CAF50',     // Verde
+					paper: '#FFEB3B',       // Amarillo
+					glass: '#FF9800',       // Naranja
+					plastic: '#2196F3',     // Azul
+					metal: '#9E9E9E',       // Gris
+					sanitary: '#F44336',    // Rojo
+					dump: '#9C27B0',        // Púrpura
+					various: '#212121',     // Negro
 				}
 			},
 			borderRadius: {
@@ -84,11 +96,22 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'bounce-slow': {
+					'0%, 100%': {
+						transform: 'translateY(-5%)',
+						animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)',
+					},
+					'50%': {
+						transform: 'translateY(0)',
+						animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
+					},
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'bounce-slow': 'bounce-slow 3s infinite',
 			}
 		}
 	},
