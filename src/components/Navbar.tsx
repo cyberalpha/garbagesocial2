@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-primary text-primary-foreground border-b sticky top-0 z-50 shadow-sm">
+    <nav className="navbar-gradient border-b sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
@@ -37,13 +37,13 @@ const Navbar: React.FC = () => {
             </Link>
             <div className="hidden md:block ml-10">
               <div className="flex items-center space-x-4">
-                <Link to="/" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-foreground hover:text-primary transition duration-150">
+                <Link to="/" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white/20 transition duration-150">
                   Inicio
                 </Link>
-                <Link to="/map" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-foreground hover:text-primary transition duration-150">
+                <Link to="/map" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white/20 transition duration-150">
                   Mapa
                 </Link>
-                <Link to="/about" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-foreground hover:text-primary transition duration-150">
+                <Link to="/about" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white/20 transition duration-150">
                   Acerca de
                 </Link>
               </div>
@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
                 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="rounded-full text-primary-foreground hover:bg-primary-foreground hover:text-primary">
+                    <Button variant="ghost" size="icon" className="rounded-full text-white hover:bg-white/20">
                       <Avatar className="h-8 w-8">
                         <AvatarImage src={profile?.avatar_url} />
                         <AvatarFallback>{profile ? getInitials(profile.name) : 'U'}</AvatarFallback>
@@ -94,7 +94,7 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="md:hidden bg-primary-foreground text-primary">
+      <div className="md:hidden bg-white text-primary">
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
           <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-100">
             Inicio

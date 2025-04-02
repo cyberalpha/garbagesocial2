@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -29,6 +29,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import LocationPicker from '@/components/LocationPicker';
+import ImageUpload from '@/components/ImageUpload';
+import { Camera, MapPin } from 'lucide-react';
 
 // Esquema de validación para nueva publicación
 const postSchema = z.object({
@@ -51,7 +54,9 @@ type PostFormValues = z.infer<typeof postSchema>;
 const NewPost = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = useState(false);
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [imageUrl, setImageUrl] = useState<string>('');
 
   // Formulario de nueva publicación
   const form = useForm<PostFormValues>({
@@ -64,20 +69,17 @@ const NewPost = () => {
     },
   });
 
-  // Función para simular la geolocalización
-  const getSimulatedGeoLocation = () => {
-    // Coordenadas de Santiago de Chile (como ejemplo)
-    return {
-      lat: -33.4489 + (Math.random() - 0.5) * 0.05,
-      lng: -70.6693 + (Math.random() - 0.5) * 0.05
-    };
-  };
-
   // Manejar envío del formulario
   async function onSubmit(values: PostFormValues) {
     if (!user) return;
-
-    const geoLocation = getSimulatedGeoLocation();
+    if (!location) {
+      toast({
+        title: "Error",
+        description: "Por favor selecciona una ubicación en el mapa.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     try {
       setLoading(true);
@@ -90,8 +92,9 @@ const NewPost = () => {
           description: values.description,
           category: values.category,
           address: values.address,
-          lat: geoLocation.lat,
-          lng: geoLocation.lng,
+          image_url: imageUrl || null,
+          lat: location.lat,
+          lng: location.lng,
         });
 
       if (error) throw error;
@@ -186,6 +189,24 @@ const NewPost = () => {
                   )}
                 />
 
+                <div className="space-y-2">
+                  <FormLabel htmlFor="image">Imagen (opcional)</FormLabel>
+                  <ImageUpload
+                    bucketName="post_images"
+                    folderPath={user!.id}
+                    onImageUploaded={setImageUrl}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <FormLabel className="flex items-center">
+                    <MapPin className="mr-1 h-4 w-4" />
+                    Ubicación
+                  </FormLabel>
+                  <LocationPicker value={location} onChange={setLocation} />
+                </div>
+
                 <FormField
                   control={form.control}
                   name="address"
@@ -193,16 +214,14 @@ const NewPost = () => {
                     <FormItem>
                       <FormLabel>Dirección</FormLabel>
                       <FormControl>
-                        <Input placeholder="Dirección o ubicación" {...field} />
+                        <Input placeholder="Dirección o ubicación detallada" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                {/* Aquí iría un componente para subir imágenes que podemos implementar luego */}
-
-                <Button type="submit" className="w-full" disabled={loading}>
+                <Button type="submit" className="w-full" disabled={loading || !location}>
                   {loading ? "Publicando..." : "Crear publicación"}
                 </Button>
               </form>
