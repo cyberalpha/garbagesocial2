@@ -9,7 +9,111 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      posts: {
+        Row: {
+          address: string
+          category: string
+          claimed_at: string | null
+          claimed_by: string | null
+          collector_rating: string | null
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          lat: number
+          lng: number
+          publisher_rating: string | null
+          status: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          address: string
+          category: string
+          claimed_at?: string | null
+          claimed_by?: string | null
+          collector_rating?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          lat: number
+          lng: number
+          publisher_rating?: string | null
+          status?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          address?: string
+          category?: string
+          claimed_at?: string | null
+          claimed_by?: string | null
+          collector_rating?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          lat?: number
+          lng?: number
+          publisher_rating?: string | null
+          status?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "posts_claimed_by_fkey"
+            columns: ["claimed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          id: string
+          name: string
+          negative_ratings: number | null
+          neutral_ratings: number | null
+          positive_ratings: number | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          id: string
+          name: string
+          negative_ratings?: number | null
+          neutral_ratings?: number | null
+          positive_ratings?: number | null
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          negative_ratings?: number | null
+          neutral_ratings?: number | null
+          positive_ratings?: number | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
