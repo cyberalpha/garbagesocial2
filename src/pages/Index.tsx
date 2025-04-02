@@ -37,7 +37,10 @@ const Index: React.FC = () => {
           image_url,
           created_at,
           user_id,
-          profiles:user_id(name, avatar_url)
+          user:user_id (
+            name:profiles!user_id(name),
+            avatar:profiles!user_id(avatar_url)
+          )
         `)
         .eq('status', 'available')
         .order('created_at', { ascending: false });
@@ -50,8 +53,8 @@ const Index: React.FC = () => {
         const formattedPosts = data.map(post => ({
           id: post.id,
           userId: post.user_id,
-          username: post.profiles?.name || 'Usuario',
-          userAvatar: post.profiles?.avatar_url || '',
+          username: post.user?.name?.name || 'Usuario',
+          userAvatar: post.user?.avatar?.avatar_url || '',
           category: post.category as WasteCategory,
           title: post.title,
           description: post.description || '',
