@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
@@ -37,10 +36,7 @@ const Index: React.FC = () => {
           image_url,
           created_at,
           user_id,
-          user:user_id (
-            name:profiles!user_id(name),
-            avatar:profiles!user_id(avatar_url)
-          )
+          profiles(name, avatar_url)
         `)
         .eq('status', 'available')
         .order('created_at', { ascending: false });
@@ -53,8 +49,8 @@ const Index: React.FC = () => {
         const formattedPosts = data.map(post => ({
           id: post.id,
           userId: post.user_id,
-          username: post.user?.name?.name || 'Usuario',
-          userAvatar: post.user?.avatar?.avatar_url || '',
+          username: post.profiles?.[0]?.name || 'Usuario',
+          userAvatar: post.profiles?.[0]?.avatar_url || '',
           category: post.category as WasteCategory,
           title: post.title,
           description: post.description || '',
