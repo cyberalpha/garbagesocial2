@@ -78,8 +78,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (error) {
           console.error('Error fetching profile:', error);
-        } else {
-          setProfile(data);
+        } else if (data) {
+          // Asegurarnos de que el tipo sea 'individual' o 'organization'
+          const userType = data.type === 'organization' ? 'organization' : 'individual';
+          
+          setProfile({
+            id: data.id,
+            name: data.name,
+            type: userType,
+            avatar_url: data.avatar_url,
+            positive_ratings: data.positive_ratings || 0,
+            negative_ratings: data.negative_ratings || 0,
+            neutral_ratings: data.neutral_ratings || 0
+          });
         }
       } catch (error) {
         console.error('Error fetching profile:', error);

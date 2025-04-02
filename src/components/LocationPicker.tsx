@@ -7,6 +7,7 @@ interface LocationPickerProps {
   onChange: (location: { lat: number; lng: number }) => void;
 }
 
+// Añadimos estas declaraciones de tipo para Google Maps API
 declare global {
   interface Window {
     google: any;
@@ -16,8 +17,8 @@ declare global {
 
 const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange }) => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [marker, setMarker] = useState<google.maps.Marker | null>(null);
+  const [map, setMap] = useState<any | null>(null);
+  const [marker, setMarker] = useState<any | null>(null);
   const [loaded, setLoaded] = useState(false);
   
   // Inicializar el mapa cuando se carga el script
