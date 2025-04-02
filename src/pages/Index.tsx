@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
@@ -35,8 +36,7 @@ const Index: React.FC = () => {
           status, 
           image_url,
           created_at,
-          user_id,
-          profiles(name, avatar_url)
+          user_id
         `)
         .eq('status', 'available')
         .order('created_at', { ascending: false });
@@ -45,12 +45,29 @@ const Index: React.FC = () => {
         throw error;
       }
 
-      if (data) {
+      // Fetch profiles in a separate query to avoid relationship confusion
+      if (data && data.length > 0) {
+        const userIds = [...new Set(data.map(post => post.user_id))];
+        
+        const { data: profilesData, error: profilesError } = await supabase
+          .from('profiles')
+          .select('id, name, avatar_url')
+          .in('id', userIds);
+          
+        if (profilesError) {
+          console.error('Error fetching profiles:', profilesError);
+        }
+        
+        const profilesMap = (profilesData || []).reduce((acc, profile) => {
+          acc[profile.id] = profile;
+          return acc;
+        }, {} as Record<string, any>);
+        
         const formattedPosts = data.map(post => ({
           id: post.id,
           userId: post.user_id,
-          username: post.profiles?.[0]?.name || 'Usuario',
-          userAvatar: post.profiles?.[0]?.avatar_url || '',
+          username: profilesMap[post.user_id]?.name || 'Usuario',
+          userAvatar: profilesMap[post.user_id]?.avatar_url || '',
           category: post.category as WasteCategory,
           title: post.title,
           description: post.description || '',
@@ -65,6 +82,8 @@ const Index: React.FC = () => {
         }));
         
         setPosts(formattedPosts);
+      } else {
+        setPosts([]);
       }
     } catch (error) {
       console.error('Error fetching posts:', error);
