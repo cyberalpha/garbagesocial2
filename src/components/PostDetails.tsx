@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -115,11 +114,13 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
     try {
       setLoading(true);
       
-      const response = await fetch(`${supabase.supabaseUrl}/functions/v1/claim-post`, {
+      // Fix 1: Use correct way to get the Supabase URL
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/claim-post`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${supabase.auth.session()?.access_token}`
+          // Fix 2: Use the correct way to get the session token
+          'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
         },
         body: JSON.stringify({
           postId: post.id,
@@ -200,7 +201,8 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
         .from('posts')
         .update({
           status: 'collected',
-          publisher_rating: rating
+          // Fix 3: Use a typed field for publisher_rating
+          publisher_rating: rating as any
         })
         .eq('id', post.id);
         
