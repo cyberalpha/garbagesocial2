@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
@@ -126,8 +127,8 @@ const Index: React.FC = () => {
     <Layout>
       <div className="home-gradient">
         <div className="container py-10">
-          {/* Hero Section */}
-          <section className="relative bg-gradient-to-r from-primary to-green-700 text-white py-16">
+          {/* Hero Section with new gradient */}
+          <section className="relative hero-gradient text-gray-800 py-16 rounded-xl shadow-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="md:w-2/3">
                 <h1 className="text-4xl sm:text-5xl font-bold mb-6">
@@ -140,7 +141,7 @@ const Index: React.FC = () => {
                   {user ? (
                     <Button 
                       size="lg" 
-                      className="bg-white text-primary hover:bg-gray-100"
+                      className="bg-primary text-white hover:bg-primary/90"
                       asChild
                     >
                       <a href="/new-post">Publicar Residuo</a>
@@ -148,7 +149,7 @@ const Index: React.FC = () => {
                   ) : (
                     <Button 
                       size="lg" 
-                      className="bg-white text-primary hover:bg-gray-100"
+                      className="bg-primary text-white hover:bg-primary/90"
                       asChild
                     >
                       <a href="/auth">
@@ -160,7 +161,7 @@ const Index: React.FC = () => {
                   <Button 
                     size="lg" 
                     variant="outline" 
-                    className="border-white text-white hover:bg-white/20"
+                    className="border-primary text-primary hover:bg-primary/10"
                     asChild
                   >
                     <a href={user ? "/map" : "/auth"}>Ver Mapa</a>
@@ -170,7 +171,11 @@ const Index: React.FC = () => {
             </div>
             <div className="hidden lg:block absolute bottom-0 right-0 w-1/3 h-full">
               <div className="relative h-full">
-                <Recycle className="absolute bottom-10 right-20 text-white/30 w-64 h-64 animate-bounce-slow" />
+                <img 
+                  src="/lovable-uploads/075fd805-57c3-4529-9440-17306830124a.png" 
+                  alt="Recycling Logo" 
+                  className="absolute bottom-10 right-20 w-64 h-64" 
+                />
               </div>
             </div>
           </section>

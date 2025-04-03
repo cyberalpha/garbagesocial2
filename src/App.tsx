@@ -12,6 +12,8 @@ import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Profile from "./pages/Profile";
 import NewPost from "./pages/NewPost";
+import EditPost from "./pages/EditPost";
+import PostPage from "./pages/PostPage";
 import Map from "./pages/Map";
 import Contact from "./pages/Contact";
 
@@ -37,6 +39,16 @@ const App = () => (
             <Route path="/new-post" element={
               <ProtectedRoute>
                 <NewPost />
+              </ProtectedRoute>
+            } />
+            <Route path="/edit-post/:id" element={
+              <ProtectedRoute>
+                <EditPost />
+              </ProtectedRoute>
+            } />
+            <Route path="/post/:id" element={
+              <ProtectedRoute>
+                <PostPage />
               </ProtectedRoute>
             } />
             <Route path="/map" element={

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -190,7 +191,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
   };
 
   // Manejar finalización de recolección
-  const handleCompleteCollection = async (rating: 'positive' | 'negative' | 'neutral') => {
+  const handleCompleteCollection = async (rating: 'positive' | 'neutral' | 'negative') => {
     if (!user || !post.claimedBy) return;
     
     try {
@@ -201,8 +202,8 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
         .from('posts')
         .update({
           status: 'collected',
-          // Fix 3: Use a typed field for publisher_rating
-          publisher_rating: rating as any
+          // Fix 3: Use proper type for publisher_rating
+          publisher_rating: rating as 'positive' | 'neutral' | 'negative'
         })
         .eq('id', post.id);
         

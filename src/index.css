@@ -91,6 +91,11 @@
   @apply bg-gradient-to-br from-green-50 to-emerald-50;
 }
 
+/* Nuevo gradiente para la sección hero */
+.hero-gradient {
+  background: linear-gradient(120deg, rgba(232, 246, 239, 1) 0%, rgba(215, 235, 223, 1) 100%);
+}
+
 /* Estilos para categorías de residuos */
 .bg-waste-organic {
   @apply bg-green-500 text-white;
