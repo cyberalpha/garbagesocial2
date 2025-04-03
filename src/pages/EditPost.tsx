@@ -96,9 +96,10 @@ const EditPost = () => {
           return;
         }
         
-        // Verificar si aún se puede editar
-        setEditCount(data.edit_count || 0);
-        setCanEdit(data.status === 'available' && (data.edit_count || 0) < 1);
+        // Verificar si aún se puede editar - uso el contador de edición o asume 0 si no existe
+        // Fix: Check if edit_count exists and set default value if not
+        setEditCount(data.edit_count !== undefined ? data.edit_count : 0);
+        setCanEdit(data.status === 'available' && (data.edit_count !== undefined ? data.edit_count < 1 : true));
         
         // Rellenar el formulario con los datos existentes
         form.reset({
@@ -140,16 +141,23 @@ const EditPost = () => {
     try {
       setSubmitting(true);
       
+      // Fix: Create an update object with existing fields plus edit_count increment
+      const updateData: any = {
+        title: values.title,
+        description: values.description,
+        category: values.category,
+        address: values.address || `Lat: ${location.lat.toFixed(6)}, Lng: ${location.lng.toFixed(6)}`,
+        image_url: imageUrl || null,
+      };
+      
+      // Add edit_count field if we can successfully edit
+      if (canEdit) {
+        updateData.edit_count = editCount + 1;
+      }
+      
       const { error } = await supabase
         .from('posts')
-        .update({
-          title: values.title,
-          description: values.description,
-          category: values.category,
-          address: values.address || `Lat: ${location.lat.toFixed(6)}, Lng: ${location.lng.toFixed(6)}`,
-          image_url: imageUrl || null,
-          edit_count: editCount + 1,
-        })
+        .update(updateData)
         .eq('id', id)
         .eq('user_id', user.id);
 

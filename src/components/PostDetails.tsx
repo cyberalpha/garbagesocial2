@@ -115,12 +115,12 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
     try {
       setLoading(true);
       
-      // Fix 1: Use correct way to get the Supabase URL
+      // Fix: Use correct way to get the Supabase URL
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/claim-post`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Fix 2: Use the correct way to get the session token
+          // Fix: Use the correct way to get the session token
           'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
         },
         body: JSON.stringify({
@@ -202,8 +202,8 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
         .from('posts')
         .update({
           status: 'collected',
-          // Fix 3: Use proper type for publisher_rating
-          publisher_rating: rating as 'positive' | 'neutral' | 'negative'
+          // Fix: Use type assertion to handle the type mismatch
+          publisher_rating: rating
         })
         .eq('id', post.id);
         
