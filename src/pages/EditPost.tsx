@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { useAuth } from '@/contexts/AuthContext';
@@ -33,7 +32,6 @@ import LocationPicker from '@/components/LocationPicker';
 import ImageUpload from '@/components/ImageUpload';
 import { Camera, MapPin, ArrowLeft } from 'lucide-react';
 
-// Esquema de validación para edición de publicación
 const editPostSchema = z.object({
   title: z.string().min(5, {
     message: "El título debe tener al menos 5 caracteres.",
@@ -60,7 +58,6 @@ const EditPost = () => {
   const [editCount, setEditCount] = useState(0);
   const [canEdit, setCanEdit] = useState(true);
   
-  // Formulario de edición de publicación
   const form = useForm<EditPostFormValues>({
     resolver: zodResolver(editPostSchema),
     defaultValues: {
@@ -71,7 +68,6 @@ const EditPost = () => {
     },
   });
 
-  // Cargar datos de la publicación
   useEffect(() => {
     const fetchPost = async () => {
       if (!user || !id) return;
@@ -96,12 +92,9 @@ const EditPost = () => {
           return;
         }
         
-        // Verificar si aún se puede editar - uso el contador de edición o asume 0 si no existe
-        // Fix: Check if edit_count exists and set default value if not
-        setEditCount(data.edit_count !== undefined ? data.edit_count : 0);
-        setCanEdit(data.status === 'available' && (data.edit_count !== undefined ? data.edit_count < 1 : true));
+        setEditCount(data.edit_count ?? 0);
+        setCanEdit(data.status === 'available' && (data.edit_count ?? 0) < 1);
         
-        // Rellenar el formulario con los datos existentes
         form.reset({
           title: data.title,
           description: data.description,
@@ -109,7 +102,6 @@ const EditPost = () => {
           address: data.address || '',
         });
         
-        // Establecer ubicación e imagen
         setLocation({
           lat: data.lat,
           lng: data.lng
@@ -134,14 +126,12 @@ const EditPost = () => {
     fetchPost();
   }, [user, id, navigate, form]);
 
-  // Manejar envío del formulario
   async function onSubmit(values: EditPostFormValues) {
     if (!user || !id || !location || !canEdit) return;
     
     try {
       setSubmitting(true);
       
-      // Fix: Create an update object with existing fields plus edit_count increment
       const updateData: any = {
         title: values.title,
         description: values.description,
@@ -150,7 +140,6 @@ const EditPost = () => {
         image_url: imageUrl || null,
       };
       
-      // Add edit_count field if we can successfully edit
       if (canEdit) {
         updateData.edit_count = editCount + 1;
       }

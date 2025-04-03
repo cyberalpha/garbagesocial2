@@ -18,6 +18,7 @@ export type Database = {
           collector_rating: string | null
           created_at: string
           description: string | null
+          edit_count: number | null
           id: string
           image_url: string | null
           lat: number
@@ -35,6 +36,7 @@ export type Database = {
           collector_rating?: string | null
           created_at?: string
           description?: string | null
+          edit_count?: number | null
           id?: string
           image_url?: string | null
           lat: number
@@ -52,6 +54,7 @@ export type Database = {
           collector_rating?: string | null
           created_at?: string
           description?: string | null
+          edit_count?: number | null
           id?: string
           image_url?: string | null
           lat?: number

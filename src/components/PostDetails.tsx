@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -35,7 +34,6 @@ interface PostDetailsProps {
   onRefresh: () => void;
 }
 
-// Esquema para edición de post
 const editPostSchema = z.object({
   title: z.string().min(5, {
     message: "El título debe tener al menos 5 caracteres.",
@@ -56,13 +54,9 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
   const [distanceToPost, setDistanceToPost] = useState<number | null>(null);
   const [canComplete, setCanComplete] = useState(false);
 
-  // Determinar si el post está reclamado por el usuario actual
   const isClaimedByCurrentUser = post.claimedBy === user?.id;
-
-  // Determinar si el usuario puede editar el post
   const canEditPost = post.userId === user?.id && post.status === 'available';
 
-  // Formulario para edición
   const editForm = useForm<EditPostValues>({
     resolver: zodResolver(editPostSchema),
     defaultValues: {
@@ -71,7 +65,6 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
     },
   });
 
-  // Obtener ubicación actual del usuario
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -89,7 +82,6 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
     }
   }, []);
 
-  // Calcular distancia al post cuando tenemos ubicación actual
   useEffect(() => {
     if (!currentLocation || !window.google || !window.google.maps) return;
     
@@ -104,23 +96,19 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
     const distance = calculateDistance();
     setDistanceToPost(distance);
     
-    // Considerar que está cerca si está a menos de 100 metros
     setCanComplete(distance < 100);
   }, [currentLocation, post]);
 
-  // Manejar reclamo de publicación
   const handleClaimPost = async () => {
     if (!user) return;
     
     try {
       setLoading(true);
       
-      // Fix: Use correct way to get the Supabase URL
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/claim-post`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Fix: Use the correct way to get the session token
           'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
         },
         body: JSON.stringify({
@@ -153,7 +141,6 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
     }
   };
 
-  // Manejar edición de post
   const handleEditPost = async (values: EditPostValues) => {
     if (!user) return;
     
@@ -190,26 +177,22 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
     }
   };
 
-  // Manejar finalización de recolección
   const handleCompleteCollection = async (rating: 'positive' | 'neutral' | 'negative') => {
     if (!user || !post.claimedBy) return;
     
     try {
       setLoading(true);
       
-      // Actualizar el estado del post
       const { error } = await supabase
         .from('posts')
         .update({
           status: 'collected',
-          // Fix: Use type assertion to handle the type mismatch
-          publisher_rating: rating
+          publisher_rating: rating as any
         })
         .eq('id', post.id);
         
       if (error) throw error;
       
-      // Actualizar las calificaciones del reciclador
       const ratingField = `${rating}_ratings`;
       
       const { error: profileError } = await supabase
@@ -238,7 +221,6 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
     }
   };
 
-  // Formatear fecha
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
@@ -345,7 +327,6 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
         )}
       </CardContent>
       
-      {/* Dialog para editar post */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
         <DialogContent>
           <DialogHeader>
@@ -399,7 +380,6 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
         </DialogContent>
       </Dialog>
       
-      {/* Dialog para calificar */}
       <Dialog open={showRatingDialog} onOpenChange={setShowRatingDialog}>
         <DialogContent>
           <DialogHeader>
