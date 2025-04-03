@@ -8,13 +8,15 @@ import MapComponent from '@/components/MapComponent';
 import PostsList from '@/components/PostsList';
 import { TrashIcon, Route } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
-import { Post } from '@/types';
+import { Post, WasteCategory } from '@/types';
+import CategoryFilter from '@/components/CategoryFilter';
 
 const MapPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedPosts, setSelectedPosts] = useState<Post[]>([]);
   const [showRoute, setShowRoute] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<WasteCategory[]>([]);
 
   useEffect(() => {
     fetchAvailablePosts();
@@ -109,7 +111,7 @@ const MapPage = () => {
   };
 
   const handleCreateRoute = () => {
-    if (selectedPosts.length > 1) {
+    if (selectedPosts.length > 0) {
       setShowRoute(true);
       toast({
         title: 'Ruta creada',
@@ -118,7 +120,7 @@ const MapPage = () => {
     } else {
       toast({
         title: 'Error',
-        description: 'Selecciona al menos 2 puntos para crear una ruta',
+        description: 'Selecciona al menos un punto para crear una ruta',
         variant: 'destructive'
       });
     }
@@ -128,6 +130,21 @@ const MapPage = () => {
     setSelectedPosts([]);
     setShowRoute(false);
   };
+
+  const handleCategoryToggle = (category: WasteCategory) => {
+    setSelectedCategories(prev => {
+      if (prev.includes(category)) {
+        return prev.filter(c => c !== category);
+      } else {
+        return [...prev, category];
+      }
+    });
+  };
+
+  // Filtrar los posts por categoría si hay categorías seleccionadas
+  const filteredPosts = selectedCategories.length > 0
+    ? posts.filter(post => selectedCategories.includes(post.category))
+    : posts;
 
   return (
     <Layout>
@@ -140,13 +157,18 @@ const MapPage = () => {
               </CardHeader>
               <CardContent className="p-0">
                 <MapComponent 
-                  posts={posts} 
+                  posts={filteredPosts} 
                   selectedPosts={selectedPosts} 
                   showRoute={showRoute}
                   className="h-[500px] w-full rounded-b-lg"
                 />
               </CardContent>
             </Card>
+            
+            <CategoryFilter 
+              selectedCategories={selectedCategories}
+              onCategoryToggle={handleCategoryToggle}
+            />
             
             {selectedPosts.length > 0 && (
               <div className="flex justify-between items-center mb-6 p-4 bg-green-50 rounded-lg border border-green-200">
@@ -184,7 +206,7 @@ const MapPage = () => {
               </CardHeader>
               <CardContent>
                 <PostsList 
-                  posts={posts} 
+                  posts={filteredPosts} 
                   loading={loading} 
                   selectedPosts={selectedPosts}
                   onPostSelect={handlePostSelect}

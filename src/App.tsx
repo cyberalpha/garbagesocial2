@@ -13,6 +13,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Profile from "./pages/Profile";
 import NewPost from "./pages/NewPost";
 import Map from "./pages/Map";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/profile" element={
               <ProtectedRoute>
                 <Profile />

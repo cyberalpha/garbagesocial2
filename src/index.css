@@ -6,117 +6,120 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 240 10% 3.9%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    --card-foreground: 240 10% 3.9%;
+ 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 142 76% 36%;
+    --popover-foreground: 240 10% 3.9%;
+ 
+    --primary: 142.1 76.2% 36.3%;
     --primary-foreground: 355.7 100% 97.3%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
+ 
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+ 
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+ 
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+ 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 142 76% 36%;
-
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 142.1 76.2% 36.3%;
+ 
     --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 142 70% 40%;
-    --primary-foreground: 144.9 80.4% 10%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 142.1 70.6% 45.3%;
     
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Colores para categorías de residuos */
+    --waste-organic: 110 70% 70%;
+    --waste-paper: 50 100% 70%;
+    --waste-glass: 185 70% 70%;
+    --waste-plastic: 200 70% 70%;
+    --waste-metal: 0 0% 70%;
+    --waste-sanitary: 0 70% 70%;
+    --waste-dump: 30 70% 70%;
+    --waste-various: 270 70% 70%;
+  }
+ 
+  .dark {
+    --background: 20 14.3% 4.1%;
+    --foreground: 0 0% 95%;
+ 
+    --card: 24 9.8% 10%;
+    --card-foreground: 0 0% 95%;
+ 
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 95%;
+ 
+    --primary: 142.1 70.6% 45.3%;
+    --primary-foreground: 144.9 80.4% 10%;
+ 
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+ 
+    --muted: 0 0% 15%;
+    --muted-foreground: 240 5% 64.9%;
+ 
+    --accent: 12 6.5% 15.1%;
+    --accent-foreground: 0 0% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+ 
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 142.4 71.8% 29.2%;
   }
 }
-
+ 
 @layer base {
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
   }
 }
 
-.category-badge {
-  @apply inline-block px-2 py-1 rounded-full text-xs font-semibold text-white;
+/* Gradiente suave para la página de inicio */
+.home-gradient {
+  @apply bg-gradient-to-br from-green-50 to-emerald-50;
 }
 
-/* Nuevos estilos para el degradé de la barra de navegación y pie de página */
-.navbar-gradient {
-  @apply bg-gradient-to-r from-teal-500 via-emerald-400 to-cyan-400 text-white;
+/* Estilos para categorías de residuos */
+.bg-waste-organic {
+  @apply bg-green-500 text-white;
 }
 
-.footer-gradient {
-  @apply bg-gradient-to-r from-teal-500/10 via-emerald-400/10 to-cyan-400/10;
+.bg-waste-paper {
+  @apply bg-yellow-400;
 }
 
-/* Estilos para el componente de subida de imágenes */
-.image-upload-container {
-  @apply relative cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 transition-all hover:border-primary;
+.bg-waste-glass {
+  @apply bg-cyan-500 text-white;
 }
 
-.image-upload-container.dragging {
-  @apply border-primary bg-primary/10;
+.bg-waste-plastic {
+  @apply bg-blue-500 text-white;
 }
 
-.image-preview {
-  @apply relative w-32 h-32 overflow-hidden rounded-full mx-auto mb-4;
+.bg-waste-metal {
+  @apply bg-gray-500 text-white;
+}
+
+.bg-waste-sanitary {
+  @apply bg-red-400 text-white;
+}
+
+.bg-waste-dump {
+  @apply bg-amber-600 text-white;
+}
+
+.bg-waste-various {
+  @apply bg-purple-500 text-white;
 }

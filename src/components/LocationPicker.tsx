@@ -140,7 +140,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({ value, onChange }) => {
         <span>
           {value 
             ? `Ubicación seleccionada (${value.lat.toFixed(6)}, ${value.lng.toFixed(6)})` 
-            : 'Haz clic en el mapa para seleccionar la ubicación'}
+            : 'Haz clic en el mapa para seleccionar la ubicación o se usará tu ubicación actual'}
         </span>
       </div>
     </div>

@@ -33,7 +33,7 @@ import LocationPicker from '@/components/LocationPicker';
 import ImageUpload from '@/components/ImageUpload';
 import { Camera, MapPin } from 'lucide-react';
 
-// Esquema de validación para nueva publicación
+// Esquema de validación para nueva publicación (dirección ahora es opcional)
 const postSchema = z.object({
   title: z.string().min(5, {
     message: "El título debe tener al menos 5 caracteres.",
@@ -44,9 +44,7 @@ const postSchema = z.object({
   category: z.enum(["organic", "paper", "glass", "plastic", "metal", "sanitary", "dump", "various"], {
     required_error: "Por favor selecciona una categoría.",
   }),
-  address: z.string().min(5, {
-    message: "Por favor ingresa una dirección válida.",
-  }),
+  address: z.string().optional(), // Ahora la dirección es opcional
 });
 
 type PostFormValues = z.infer<typeof postSchema>;
@@ -91,7 +89,7 @@ const NewPost = () => {
           title: values.title,
           description: values.description,
           category: values.category,
-          address: values.address,
+          address: values.address || `Lat: ${location.lat.toFixed(6)}, Lng: ${location.lng.toFixed(6)}`, // Usar coordenadas si no hay dirección
           image_url: imageUrl || null,
           lat: location.lat,
           lng: location.lng,
@@ -212,9 +210,9 @@ const NewPost = () => {
                   name="address"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Dirección</FormLabel>
+                      <FormLabel>Dirección (opcional)</FormLabel>
                       <FormControl>
-                        <Input placeholder="Dirección o ubicación detallada" {...field} />
+                        <Input placeholder="Dirección o ubicación detallada (opcional)" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

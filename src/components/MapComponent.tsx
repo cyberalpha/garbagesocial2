@@ -37,14 +37,37 @@ const MapComponent: React.FC<MapComponentProps> = ({
   const [markers, setMarkers] = useState<any[]>([]);
   const [directionsRenderer, setDirectionsRenderer] = useState<any | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [currentLocation, setCurrentLocation] = useState<{lat: number, lng: number} | null>(null);
+
+  // Obtener ubicación actual del usuario
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setCurrentLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          });
+        },
+        (error) => {
+          console.error("Error getting current location:", error);
+          // Santiago de Chile como ubicación por defecto si hay error
+          setCurrentLocation({ lat: -33.4489, lng: -70.6693 });
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser");
+      setCurrentLocation({ lat: -33.4489, lng: -70.6693 });
+    }
+  }, []);
 
   // Inicializar el mapa cuando se carga el script
   useEffect(() => {
     const initMap = () => {
       if (!mapRef.current) return;
       
-      // Santiago de Chile como ubicación por defecto
-      const center = { lat: -33.4489, lng: -70.6693 };
+      // Ubicación inicial (usar la actual si está disponible)
+      const center = currentLocation || { lat: -33.4489, lng: -70.6693 };
       
       // Crear el mapa
       const mapInstance = new window.google.maps.Map(mapRef.current, {
@@ -57,7 +80,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
       // Crear el directionsRenderer para las rutas
       const directionsRendererInstance = new window.google.maps.DirectionsRenderer({
-        suppressMarkers: true,
+        suppressMarkers: false,
         polylineOptions: {
           strokeColor: "#4CAF50",
           strokeWeight: 5,
@@ -67,33 +90,53 @@ const MapComponent: React.FC<MapComponentProps> = ({
       
       directionsRendererInstance.setMap(mapInstance);
       
+      // Añadir marcador de ubicación actual si está disponible
+      if (currentLocation) {
+        new window.google.maps.Marker({
+          position: currentLocation,
+          map: mapInstance,
+          title: "Tu ubicación actual",
+          icon: {
+            path: window.google.maps.SymbolPath.CIRCLE,
+            fillColor: "#4285F4",
+            fillOpacity: 1,
+            strokeWeight: 2,
+            strokeColor: "#FFFFFF",
+            scale: 10
+          },
+          zIndex: 10
+        });
+      }
+      
       setMap(mapInstance);
       setDirectionsRenderer(directionsRendererInstance);
       setLoaded(true);
     };
 
     // Si ya existe el objeto google en window, inicializamos el mapa
-    if (window.google && window.google.maps) {
+    if (window.google && window.google.maps && currentLocation) {
       initMap();
       return;
     }
     
     // De lo contrario, cargamos el script de Google Maps
-    window.initMap = initMap;
-    
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDw-oZruoaJzPckh5ZE2wpJBblpWSuYdUQ&callback=initMap&libraries=places,geometry`;
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-    
-    return () => {
-      window.initMap = () => {};
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
-  }, []);
+    if (currentLocation) {
+      window.initMap = initMap;
+      
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDw-oZruoaJzPckh5ZE2wpJBblpWSuYdUQ&callback=initMap&libraries=places,geometry`;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+      
+      return () => {
+        window.initMap = () => {};
+        if (script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
+      };
+    }
+  }, [currentLocation]);
 
   // Actualizar marcadores cuando cambian los posts o el mapa
   useEffect(() => {
@@ -165,21 +208,29 @@ const MapComponent: React.FC<MapComponentProps> = ({
     // Ajustar el zoom para mostrar todos los marcadores
     if (newMarkers.length > 0) {
       const bounds = new window.google.maps.LatLngBounds();
+      
+      // Añadir ubicación actual a los límites
+      if (currentLocation) {
+        bounds.extend(new window.google.maps.LatLng(currentLocation.lat, currentLocation.lng));
+      }
+      
+      // Añadir todos los marcadores a los límites
       newMarkers.forEach(marker => {
         bounds.extend(marker.getPosition());
       });
+      
       map.fitBounds(bounds);
       
-      // Si solo hay un marcador, ajustar el zoom
-      if (newMarkers.length === 1) {
+      // Si solo hay un marcador (o solo ubicación actual), ajustar el zoom
+      if (newMarkers.length <= 1) {
         map.setZoom(15);
       }
     }
-  }, [map, posts, loaded, selectedPosts]);
+  }, [map, posts, loaded, selectedPosts, currentLocation]);
 
   // Trazar ruta cuando se solicita
   useEffect(() => {
-    if (!map || !directionsRenderer || !showRoute || selectedPosts.length < 2) {
+    if (!map || !directionsRenderer || !showRoute || selectedPosts.length < 1 || !currentLocation) {
       // Si no hay ruta a mostrar, limpiar el directionsRenderer
       if (directionsRenderer) {
         directionsRenderer.setDirections({ routes: [] });
@@ -189,8 +240,20 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
     const directionsService = new window.google.maps.DirectionsService();
     
-    // Crear un waypoints con los puntos seleccionados (excluyendo origen y destino)
-    const waypoints = selectedPosts.slice(1, -1).map(post => ({
+    // Usar la ubicación actual como punto de partida
+    const origin = new window.google.maps.LatLng(
+      currentLocation.lat,
+      currentLocation.lng
+    );
+    
+    // La última ubicación seleccionada como destino
+    const destination = new window.google.maps.LatLng(
+      selectedPosts[selectedPosts.length - 1].location.lat,
+      selectedPosts[selectedPosts.length - 1].location.lng
+    );
+    
+    // Crear waypoints con los puntos seleccionados (excluyendo el destino)
+    const waypoints = selectedPosts.slice(0, -1).map(post => ({
       location: new window.google.maps.LatLng(post.location.lat, post.location.lng),
       stopover: true
     }));
@@ -198,14 +261,8 @@ const MapComponent: React.FC<MapComponentProps> = ({
     // Configurar la ruta
     directionsService.route(
       {
-        origin: new window.google.maps.LatLng(
-          selectedPosts[0].location.lat,
-          selectedPosts[0].location.lng
-        ),
-        destination: new window.google.maps.LatLng(
-          selectedPosts[selectedPosts.length - 1].location.lat,
-          selectedPosts[selectedPosts.length - 1].location.lng
-        ),
+        origin,
+        destination,
         waypoints,
         optimizeWaypoints: true,
         travelMode: window.google.maps.TravelMode.DRIVING
@@ -234,7 +291,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
         }
       }
     );
-  }, [map, directionsRenderer, selectedPosts, showRoute]);
+  }, [map, directionsRenderer, selectedPosts, showRoute, currentLocation]);
 
   return (
     <div className={cn("relative w-full h-[400px]", className)}>

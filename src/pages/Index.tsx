@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
@@ -125,175 +124,179 @@ const Index: React.FC = () => {
 
   return (
     <Layout>
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-primary to-green-700 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="md:w-2/3">
-            <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-              Tu basura es nuestro tesoro
-            </h1>
-            <p className="text-xl mb-8">
-              Conectamos a personas que tienen desechos con quienes pueden reciclarlos y darles una segunda vida.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              {user ? (
-                <Button 
-                  size="lg" 
-                  className="bg-white text-primary hover:bg-gray-100"
-                  asChild
-                >
-                  <a href="/new-post">Publicar Residuo</a>
-                </Button>
-              ) : (
-                <Button 
-                  size="lg" 
-                  className="bg-white text-primary hover:bg-gray-100"
-                  asChild
-                >
-                  <a href="/auth">
-                    <LogIn className="mr-2 h-4 w-4" />
-                    Iniciar Sesión
-                  </a>
-                </Button>
-              )}
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-white text-white hover:bg-white/20"
-                asChild
-              >
-                <a href={user ? "/map" : "/auth"}>Ver Mapa</a>
-              </Button>
-            </div>
-          </div>
-        </div>
-        <div className="hidden lg:block absolute bottom-0 right-0 w-1/3 h-full">
-          <div className="relative h-full">
-            <Recycle className="absolute bottom-10 right-20 text-white/30 w-64 h-64 animate-bounce-slow" />
-          </div>
-        </div>
-      </section>
-
-      {user ? (
-        <>
-          {/* Search and Filter Section */}
-          <section className="py-8 bg-gray-50">
+      <div className="home-gradient">
+        <div className="container py-10">
+          {/* Hero Section */}
+          <section className="relative bg-gradient-to-r from-primary to-green-700 text-white py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-                <div className="relative w-full md:w-1/2">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                  <Input
-                    type="text"
-                    placeholder="Buscar por título, descripción o ubicación..."
-                    className="w-full pl-10"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-                <Button 
-                  variant="link" 
-                  className="text-primary flex items-center"
-                  asChild
-                >
-                  <a href="/map">
-                    Ver todos en el mapa
-                    <ArrowRight size={16} className="ml-1" />
-                  </a>
-                </Button>
-              </div>
-              
-              <CategoryFilter
-                selectedCategories={selectedCategories}
-                onCategoryToggle={handleCategoryToggle}
-              />
-            </div>
-          </section>
-
-          {/* Posts List */}
-          <section className="py-8">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="text-2xl font-bold mb-6">Residuos Disponibles</h2>
-              {loading ? (
-                <div className="text-center py-12">
-                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto"></div>
-                  <p className="mt-4 text-gray-500">Cargando publicaciones...</p>
-                </div>
-              ) : filteredPosts.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredPosts.map(post => (
-                    <PostCard key={post.id} post={post} />
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <p className="text-gray-500">No se encontraron resultados que coincidan con tu búsqueda.</p>
+              <div className="md:w-2/3">
+                <h1 className="text-4xl sm:text-5xl font-bold mb-6">
+                  Tu basura es nuestro tesoro
+                </h1>
+                <p className="text-xl mb-8">
+                  Conectamos a personas que tienen desechos con quienes pueden reciclarlos y darles una segunda vida.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  {user ? (
+                    <Button 
+                      size="lg" 
+                      className="bg-white text-primary hover:bg-gray-100"
+                      asChild
+                    >
+                      <a href="/new-post">Publicar Residuo</a>
+                    </Button>
+                  ) : (
+                    <Button 
+                      size="lg" 
+                      className="bg-white text-primary hover:bg-gray-100"
+                      asChild
+                    >
+                      <a href="/auth">
+                        <LogIn className="mr-2 h-4 w-4" />
+                        Iniciar Sesión
+                      </a>
+                    </Button>
+                  )}
                   <Button 
-                    variant="link" 
-                    className="text-primary mt-2"
-                    onClick={() => {
-                      setSearchTerm('');
-                      setSelectedCategories([]);
-                    }}
+                    size="lg" 
+                    variant="outline" 
+                    className="border-white text-white hover:bg-white/20"
+                    asChild
                   >
-                    Limpiar filtros
+                    <a href={user ? "/map" : "/auth"}>Ver Mapa</a>
                   </Button>
                 </div>
-              )}
+              </div>
+            </div>
+            <div className="hidden lg:block absolute bottom-0 right-0 w-1/3 h-full">
+              <div className="relative h-full">
+                <Recycle className="absolute bottom-10 right-20 text-white/30 w-64 h-64 animate-bounce-slow" />
+              </div>
             </div>
           </section>
-        </>
-      ) : (
-        <section className="py-16 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-bold mb-4">Regístrate y comienza a reciclar</h2>
-            <p className="text-xl text-gray-600 mb-8 md:w-2/3 mx-auto">
-              Para acceder a todas las características de la aplicación, incluyendo la visualización de residuos disponibles, es necesario iniciar sesión.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg"
-                className="bg-primary hover:bg-primary/90"
-                asChild
-              >
-                <a href="/auth">Iniciar Sesión</a>
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline"
-                asChild
-              >
-                <a href="/about">Saber Más</a>
-              </Button>
-            </div>
-          </div>
-        </section>
-      )}
 
-      {/* Call to Action */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Únete al movimiento del reciclaje</h2>
-          <p className="text-xl text-gray-600 mb-8 md:w-2/3 mx-auto">
-            Ayuda a crear un planeta más limpio, fomenta la economía circular y forma parte de una comunidad comprometida con el medio ambiente.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              size="lg"
-              className="bg-primary hover:bg-primary/90"
-              asChild
-            >
-              <a href="/auth">Regístrate Ahora</a>
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline"
-              asChild
-            >
-              <a href="/about">Saber Más</a>
-            </Button>
-          </div>
+          {user ? (
+            <>
+              {/* Search and Filter Section */}
+              <section className="py-8 bg-gray-50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                    <div className="relative w-full md:w-1/2">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                      <Input
+                        type="text"
+                        placeholder="Buscar por título, descripción o ubicación..."
+                        className="w-full pl-10"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      />
+                    </div>
+                    <Button 
+                      variant="link" 
+                      className="text-primary flex items-center"
+                      asChild
+                    >
+                      <a href="/map">
+                        Ver todos en el mapa
+                        <ArrowRight size={16} className="ml-1" />
+                      </a>
+                    </Button>
+                  </div>
+                  
+                  <CategoryFilter
+                    selectedCategories={selectedCategories}
+                    onCategoryToggle={handleCategoryToggle}
+                  />
+                </div>
+              </section>
+
+              {/* Posts List */}
+              <section className="py-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <h2 className="text-2xl font-bold mb-6">Residuos Disponibles</h2>
+                  {loading ? (
+                    <div className="text-center py-12">
+                      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto"></div>
+                      <p className="mt-4 text-gray-500">Cargando publicaciones...</p>
+                    </div>
+                  ) : filteredPosts.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {filteredPosts.map(post => (
+                        <PostCard key={post.id} post={post} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <p className="text-gray-500">No se encontraron resultados que coincidan con tu búsqueda.</p>
+                      <Button 
+                        variant="link" 
+                        className="text-primary mt-2"
+                        onClick={() => {
+                          setSearchTerm('');
+                          setSelectedCategories([]);
+                        }}
+                      >
+                        Limpiar filtros
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </section>
+            </>
+          ) : (
+            <section className="py-16 bg-gray-50">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 className="text-3xl font-bold mb-4">Regístrate y comienza a reciclar</h2>
+                <p className="text-xl text-gray-600 mb-8 md:w-2/3 mx-auto">
+                  Para acceder a todas las características de la aplicación, incluyendo la visualización de residuos disponibles, es necesario iniciar sesión.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button 
+                    size="lg"
+                    className="bg-primary hover:bg-primary/90"
+                    asChild
+                  >
+                    <a href="/auth">Iniciar Sesión</a>
+                  </Button>
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    asChild
+                  >
+                    <a href="/about">Saber Más</a>
+                  </Button>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Call to Action */}
+          <section className="py-16 bg-gray-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+              <h2 className="text-3xl font-bold mb-4">Únete al movimiento del reciclaje</h2>
+              <p className="text-xl text-gray-600 mb-8 md:w-2/3 mx-auto">
+                Ayuda a crear un planeta más limpio, fomenta la economía circular y forma parte de una comunidad comprometida con el medio ambiente.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90"
+                  asChild
+                >
+                  <a href="/auth">Regístrate Ahora</a>
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  asChild
+                >
+                  <a href="/about">Saber Más</a>
+                </Button>
+              </div>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
     </Layout>
   );
 };
