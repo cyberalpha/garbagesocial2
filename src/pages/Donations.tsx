@@ -1,14 +1,11 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Heart, DollarSign, CreditCard } from 'lucide-react';
-
 const Donations = () => {
-  return (
-    <Layout>
+  return <Layout>
       <div className="container py-12 px-4 md:px-6">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-4">Apoya a Garbage Social</h1>
@@ -73,9 +70,9 @@ const Donations = () => {
               <div className="space-y-4">
                 <div>
                   <h3 className="font-medium">Cuenta Bancaria Argentina</h3>
-                  <p className="text-sm text-muted-foreground">Banco: Santander Río</p>
-                  <p className="text-sm text-muted-foreground">CBU: XXXX-XXXX-XXXX-XXXX-XXXX</p>
-                  <p className="text-sm text-muted-foreground">Alias: GARBAGE.SOCIAL.DONAR</p>
+                  <p className="text-sm text-muted-foreground">Banco: Galicia</p>
+                  <p className="text-sm text-muted-foreground">CBU: 0070107131004016191808</p>
+                  <p className="text-sm text-muted-foreground">Alias: MATE.BAHIA.CATAPLERA</p>
                 </div>
                 <Separator />
                 <div>
@@ -119,8 +116,6 @@ const Donations = () => {
           </div>
         </div>
       </div>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default Donations;
