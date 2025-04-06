@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { RecycleIcon, Mail, Phone, MapPin, Github, Twitter, Facebook, Instagram } from 'lucide-react';
+import { Mail, Phone, MapPin, Github, Twitter, Facebook, Instagram } from 'lucide-react';
+import LogoImage from './LogoImage';
 
 const Footer = () => {
   return (
@@ -9,7 +10,7 @@ const Footer = () => {
       <div className="container py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <div>
           <div className="flex items-center gap-2 mb-4">
-            <RecycleIcon className="h-6 w-6" />
+            <LogoImage size={28} className="rounded-full" />
             <span className="text-xl font-bold">Garbage Social</span>
           </div>
           <p className="text-white/80 mb-4">
@@ -52,6 +53,11 @@ const Footer = () => {
             <li>
               <Link to="/new-post" className="text-white/80 hover:text-white">
                 Publicar residuo
+              </Link>
+            </li>
+            <li>
+              <Link to="/donations" className="text-white/80 hover:text-white">
+                Donaciones
               </Link>
             </li>
           </ul>

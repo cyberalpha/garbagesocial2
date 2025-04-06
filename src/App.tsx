@@ -16,6 +16,7 @@ import EditPost from "./pages/EditPost";
 import PostPage from "./pages/PostPage";
 import Map from "./pages/Map";
 import Contact from "./pages/Contact";
+import Donations from "./pages/Donations";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/donations" element={<Donations />} />
             <Route path="/profile" element={
               <ProtectedRoute>
                 <Profile />

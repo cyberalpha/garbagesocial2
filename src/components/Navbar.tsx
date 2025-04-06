@@ -12,9 +12,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { RecycleIcon, Menu, X, LogOut, User } from 'lucide-react';
+import { Menu, X, LogOut, User } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useIsMobile } from '@/hooks/use-mobile';
+import LogoImage from './LogoImage';
 
 const Navbar = () => {
   const { user, profile, signOut } = useAuth();
@@ -27,6 +28,7 @@ const Navbar = () => {
     { name: 'Inicio', path: '/' },
     { name: 'Mapa', path: '/map' },
     { name: 'Acerca de', path: '/about' },
+    { name: 'Donaciones', path: '/donations' },
   ];
   
   const renderNavLinks = () => (
@@ -52,7 +54,7 @@ const Navbar = () => {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-2">
-            <RecycleIcon className="h-6 w-6 text-white" />
+            <LogoImage size={28} className="rounded-full" />
             <span className="text-lg font-bold text-white">Garbage Social</span>
           </Link>
           
