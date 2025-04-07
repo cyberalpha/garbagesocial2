@@ -197,11 +197,15 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
         
       if (error) throw error;
       
+      // Get the name of the field to increment based on the rating
       const ratingField = `${rating}_ratings`;
       
+      // Fix for type error - explicitly cast the increment function
       const { error: profileError } = await supabase
         .from('profiles')
-        .update({ [ratingField]: supabase.rpc('increment', { count: 1 }) })
+        .update({ 
+          [ratingField]: supabase.rpc('increment', { count: 1 }) as unknown as number 
+        })
         .eq('id', post.claimedBy);
         
       if (profileError) throw profileError;
