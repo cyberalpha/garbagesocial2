@@ -51,9 +51,9 @@ const Donations = () => {
 
   // Datos de criptomonedas
   const cryptoAddresses = {
-    bitcoin: "1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2",
-    ethereum: "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
-    usdt: "TEFccmfQ38cZS1DTZVhsUPYTfbBLSXXLSc"
+    bitcoin: "0x850ed63ae1f72902543bc665311fe95e19a02c8f",
+    ethereum: "0x850ed63ae1f72902543bc665311fe95e19a02c8f",
+    usdt: "0x850ed63ae1f72902543bc665311fe95e19a02c8f"
   };
 
   return <Layout>
@@ -168,7 +168,7 @@ const Donations = () => {
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <Bitcoin size={20} className="text-amber-500" />
-                    <h3 className="font-medium">Bitcoin (BTC)</h3>
+                    <h3 className="font-medium">Ripple (XRP)</h3>
                   </div>
                   <p className="text-sm text-muted-foreground font-mono break-all">{cryptoAddresses.bitcoin}</p>
                   <Button variant="outline" size="sm" className="mt-2" onClick={() => handleCopy(cryptoAddresses.bitcoin, 'Bitcoin')}>
@@ -181,7 +181,7 @@ const Donations = () => {
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <Euro size={20} className="text-blue-400" />
-                    <h3 className="font-medium">Ethereum (ETH)</h3>
+                    <h3 className="font-medium">Stellar (XLM)</h3>
                   </div>
                   <p className="text-sm text-muted-foreground font-mono break-all">{cryptoAddresses.ethereum}</p>
                   <Button variant="outline" size="sm" className="mt-2" onClick={() => handleCopy(cryptoAddresses.ethereum, 'Ethereum')}>
