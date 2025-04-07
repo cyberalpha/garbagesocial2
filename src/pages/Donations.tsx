@@ -1,10 +1,61 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Heart, DollarSign, CreditCard } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Heart, DollarSign, CreditCard, Bitcoin, Euro } from 'lucide-react';
+import { toast } from "@/hooks/use-toast";
+
 const Donations = () => {
+  const [customAmount, setCustomAmount] = useState<string>('');
+  
+  // Función para manejar donaciones mensuales
+  const handleMonthlyDonation = (amount: string) => {
+    toast({
+      title: "Donación mensual",
+      description: `Gracias por tu donación mensual de $${amount}. Te redirigiremos al proceso de pago.`,
+    });
+    // Aquí iría la integración con el procesador de pagos
+  };
+
+  // Función para manejar donaciones únicas
+  const handleSingleDonation = (amount: string) => {
+    const donationAmount = amount === 'Otro' ? customAmount : amount;
+    if (amount === 'Otro' && (!donationAmount || parseFloat(donationAmount) <= 0)) {
+      toast({
+        title: "Error de donación",
+        description: "Por favor ingresa un monto válido para tu donación",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    toast({
+      title: "Donación única",
+      description: `Gracias por tu donación de $${donationAmount}. Te redirigiremos al proceso de pago.`,
+    });
+    // Aquí iría la integración con el procesador de pagos
+  };
+
+  // Función para copiar datos
+  const handleCopy = (text: string, type: string) => {
+    navigator.clipboard.writeText(text);
+    toast({
+      title: "Copiado al portapapeles",
+      description: `Los datos de ${type} han sido copiados correctamente.`,
+    });
+  };
+
+  // Datos de criptomonedas
+  const cryptoAddresses = {
+    bitcoin: "1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2",
+    ethereum: "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
+    usdt: "TEFccmfQ38cZS1DTZVhsUPYTfbBLSXXLSc"
+  };
+
   return <Layout>
       <div className="container py-12 px-4 md:px-6">
         <div className="text-center mb-8">
@@ -26,14 +77,14 @@ const Donations = () => {
             </CardHeader>
             <CardContent className="flex-grow">
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <Button variant="outline" className="w-full">$5</Button>
-                <Button variant="outline" className="w-full">$10</Button>
-                <Button variant="outline" className="w-full">$25</Button>
-                <Button variant="outline" className="w-full">$50</Button>
+                <Button variant="outline" className="w-full" onClick={() => handleMonthlyDonation('5')}>$5</Button>
+                <Button variant="outline" className="w-full" onClick={() => handleMonthlyDonation('10')}>$10</Button>
+                <Button variant="outline" className="w-full" onClick={() => handleMonthlyDonation('25')}>$25</Button>
+                <Button variant="outline" className="w-full" onClick={() => handleMonthlyDonation('50')}>$50</Button>
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Donar Mensualmente</Button>
+              <Button className="w-full" onClick={() => handleMonthlyDonation('10')}>Donar Mensualmente</Button>
             </CardFooter>
           </Card>
 
@@ -47,14 +98,26 @@ const Donations = () => {
             </CardHeader>
             <CardContent className="flex-grow">
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <Button variant="outline" className="w-full">$20</Button>
-                <Button variant="outline" className="w-full">$50</Button>
-                <Button variant="outline" className="w-full">$100</Button>
-                <Button variant="outline" className="w-full">Otro</Button>
+                <Button variant="outline" className="w-full" onClick={() => handleSingleDonation('20')}>$20</Button>
+                <Button variant="outline" className="w-full" onClick={() => handleSingleDonation('50')}>$50</Button>
+                <Button variant="outline" className="w-full" onClick={() => handleSingleDonation('100')}>$100</Button>
+                <Button variant="outline" className="w-full" onClick={() => handleSingleDonation('Otro')}>Otro</Button>
+              </div>
+              {/* Input para monto personalizado */}
+              <div className="mt-4">
+                <Label htmlFor="customAmount">Monto personalizado ($)</Label>
+                <Input 
+                  id="customAmount" 
+                  placeholder="Ingresa monto" 
+                  type="number" 
+                  value={customAmount}
+                  onChange={(e) => setCustomAmount(e.target.value)}
+                  className="mt-2"
+                />
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Donar Ahora</Button>
+              <Button className="w-full" onClick={() => handleSingleDonation(customAmount || '20')}>Donar Ahora</Button>
             </CardFooter>
           </Card>
 
@@ -82,10 +145,64 @@ const Donations = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button variant="outline" className="w-full" onClick={() => navigator.clipboard.writeText('socialgarbage3000@gmail.com')}>
+              <Button variant="outline" className="w-full" onClick={() => handleCopy('socialgarbage3000@gmail.com', 'PayPal')}>
                 Copiar Email PayPal
               </Button>
             </CardFooter>
+          </Card>
+        </div>
+
+        {/* Nueva sección para criptomonedas */}
+        <div className="mt-12 max-w-3xl mx-auto">
+          <h2 className="text-2xl font-semibold mb-6 text-center">Donaciones con Criptomonedas</h2>
+          <Card>
+            <CardHeader>
+              <Bitcoin className="w-12 h-12 text-amber-500 mx-auto mb-4" />
+              <CardTitle className="text-center">Criptomonedas</CardTitle>
+              <CardDescription className="text-center">
+                También puedes colaborar usando criptomonedas
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Bitcoin size={20} className="text-amber-500" />
+                    <h3 className="font-medium">Bitcoin (BTC)</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground font-mono break-all">{cryptoAddresses.bitcoin}</p>
+                  <Button variant="outline" size="sm" className="mt-2" onClick={() => handleCopy(cryptoAddresses.bitcoin, 'Bitcoin')}>
+                    Copiar dirección
+                  </Button>
+                </div>
+                
+                <Separator />
+                
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Euro size={20} className="text-blue-400" />
+                    <h3 className="font-medium">Ethereum (ETH)</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground font-mono break-all">{cryptoAddresses.ethereum}</p>
+                  <Button variant="outline" size="sm" className="mt-2" onClick={() => handleCopy(cryptoAddresses.ethereum, 'Ethereum')}>
+                    Copiar dirección
+                  </Button>
+                </div>
+                
+                <Separator />
+                
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <DollarSign size={20} className="text-green-500" />
+                    <h3 className="font-medium">USDT (Tether)</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground font-mono break-all">{cryptoAddresses.usdt}</p>
+                  <Button variant="outline" size="sm" className="mt-2" onClick={() => handleCopy(cryptoAddresses.usdt, 'USDT')}>
+                    Copiar dirección
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
           </Card>
         </div>
 
