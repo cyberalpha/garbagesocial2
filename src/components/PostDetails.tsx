@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -183,12 +184,15 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
     try {
       setLoading(true);
       
+      // Fix for the type error - explicitly typing the rating field
+      const updateData: Record<string, any> = {
+        status: 'collected',
+        publisher_rating: rating
+      };
+      
       const { error } = await supabase
         .from('posts')
-        .update({
-          status: 'collected',
-          publisher_rating: rating as any
-        })
+        .update(updateData)
         .eq('id', post.id);
         
       if (error) throw error;
