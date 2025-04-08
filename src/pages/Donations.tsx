@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,15 +7,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Heart, DollarSign, CreditCard, Bitcoin, Euro } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
-
 const Donations = () => {
   const [customAmount, setCustomAmount] = useState<string>('');
-  
+
   // Función para manejar donaciones mensuales
   const handleMonthlyDonation = (amount: string) => {
     toast({
       title: "Donación mensual",
-      description: `Gracias por tu donación mensual de $${amount}. Te redirigiremos al proceso de pago.`,
+      description: `Gracias por tu donación mensual de $${amount}. Te redirigiremos al proceso de pago.`
     });
     // Aquí iría la integración con el procesador de pagos
   };
@@ -28,14 +26,13 @@ const Donations = () => {
       toast({
         title: "Error de donación",
         description: "Por favor ingresa un monto válido para tu donación",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
-    
     toast({
       title: "Donación única",
-      description: `Gracias por tu donación de $${donationAmount}. Te redirigiremos al proceso de pago.`,
+      description: `Gracias por tu donación de $${donationAmount}. Te redirigiremos al proceso de pago.`
     });
     // Aquí iría la integración con el procesador de pagos
   };
@@ -45,7 +42,7 @@ const Donations = () => {
     navigator.clipboard.writeText(text);
     toast({
       title: "Copiado al portapapeles",
-      description: `Los datos de ${type} han sido copiados correctamente.`,
+      description: `Los datos de ${type} han sido copiados correctamente.`
     });
   };
 
@@ -55,7 +52,6 @@ const Donations = () => {
     ethereum: "0x850ed63ae1f72902543bc665311fe95e19a02c8f",
     usdt: "0x850ed63ae1f72902543bc665311fe95e19a02c8f"
   };
-
   return <Layout>
       <div className="container py-12 px-4 md:px-6">
         <div className="text-center mb-8">
@@ -106,14 +102,7 @@ const Donations = () => {
               {/* Input para monto personalizado */}
               <div className="mt-4">
                 <Label htmlFor="customAmount">Monto personalizado ($)</Label>
-                <Input 
-                  id="customAmount" 
-                  placeholder="Ingresa monto" 
-                  type="number" 
-                  value={customAmount}
-                  onChange={(e) => setCustomAmount(e.target.value)}
-                  className="mt-2"
-                />
+                <Input id="customAmount" placeholder="Ingresa monto" type="number" value={customAmount} onChange={e => setCustomAmount(e.target.value)} className="mt-2" />
               </div>
             </CardContent>
             <CardFooter>
@@ -168,7 +157,7 @@ const Donations = () => {
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <Bitcoin size={20} className="text-amber-500" />
-                    <h3 className="font-medium">Ripple (XRP)</h3>
+                    <h3 className="font-medium">USD Coin (USDC)</h3>
                   </div>
                   <p className="text-sm text-muted-foreground font-mono break-all">{cryptoAddresses.bitcoin}</p>
                   <Button variant="outline" size="sm" className="mt-2" onClick={() => handleCopy(cryptoAddresses.bitcoin, 'Bitcoin')}>
@@ -181,7 +170,7 @@ const Donations = () => {
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <Euro size={20} className="text-blue-400" />
-                    <h3 className="font-medium">Stellar (XLM)</h3>
+                    <h3 className="font-medium">First Digital USD (FDUSD)</h3>
                   </div>
                   <p className="text-sm text-muted-foreground font-mono break-all">{cryptoAddresses.ethereum}</p>
                   <Button variant="outline" size="sm" className="mt-2" onClick={() => handleCopy(cryptoAddresses.ethereum, 'Ethereum')}>
