@@ -48,9 +48,9 @@ const PostRatingDialog: React.FC<PostRatingDialogProps> = ({
       
       const ratingField = `${rating}_ratings`;
       
-      // Fix the TypeScript error by typing the object properly with index signature
-      const updateProfileData: Record<string, any> = {};
-      // Using type assertion to tell TypeScript this is a valid operation
+      // Create a type for the updateProfileData object with index signature
+      // This allows us to dynamically set the field based on the rating
+      const updateProfileData: { [key: string]: any } = {};
       updateProfileData[ratingField] = supabase.rpc('increment', { count: 1 });
       
       const { error: profileError } = await supabase
