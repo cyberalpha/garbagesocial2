@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -197,7 +198,9 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
       
       const ratingField = `${rating}_ratings`;
       
-      const updateProfileData: Record<string, unknown> = {};
+      // Fix the TypeScript error by typing the object properly with index signature
+      const updateProfileData: Record<string, any> = {};
+      // Using type assertion to tell TypeScript this is a valid operation
       updateProfileData[ratingField] = supabase.rpc('increment', { count: 1 });
       
       const { error: profileError } = await supabase
