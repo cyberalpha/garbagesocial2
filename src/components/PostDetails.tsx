@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -184,7 +183,6 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
     try {
       setLoading(true);
       
-      // Fix for the type error - explicitly typing the rating field
       const updateData: Record<string, any> = {
         status: 'collected',
         publisher_rating: rating
@@ -197,15 +195,14 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
         
       if (error) throw error;
       
-      // Get the name of the field to increment based on the rating
       const ratingField = `${rating}_ratings`;
       
-      // Fix for type error - explicitly cast the increment function
+      const updateProfileData: Record<string, unknown> = {};
+      updateProfileData[ratingField] = supabase.rpc('increment', { count: 1 });
+      
       const { error: profileError } = await supabase
         .from('profiles')
-        .update({ 
-          [ratingField]: supabase.rpc('increment', { count: 1 }) as unknown as number 
-        })
+        .update(updateProfileData)
         .eq('id', post.claimedBy);
         
       if (profileError) throw profileError;
