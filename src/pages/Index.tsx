@@ -292,7 +292,7 @@ const Index: React.FC = () => {
                 </Button>
                 <Button 
                   size="lg" 
-                  variant="outline"
+                  //variant="outline"
                   asChild
                 >
                   <a href="/donations">Donaciones</a>
