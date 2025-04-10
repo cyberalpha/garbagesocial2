@@ -132,7 +132,7 @@ const Donations = () => {
               <div className="space-y-6">
                 
                 
-                <Separator />
+                
                 
                 
                 
