@@ -293,7 +293,7 @@ const Index: React.FC = () => {
                 <Button 
                   size="lg" 
                   //variant="outline"
-                  variant="red"
+                  className="bg-yellow-500 hover:bg-yellow-600 text-white"
                   asChild
                 >
                   <a href="/donations">Donaciones</a>
