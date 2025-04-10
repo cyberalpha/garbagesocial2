@@ -134,16 +134,7 @@ const Donations = () => {
                 
                 <Separator />
                 
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <Euro size={20} className="text-blue-400" />
-                    <h3 className="font-medium">Ethereum (ETH)</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground font-mono break-all">{cryptoAddresses.ethereum}</p>
-                  <Button variant="outline" size="sm" className="mt-2" onClick={() => handleCopy(cryptoAddresses.ethereum, 'Ethereum')}>
-                    Copiar dirección
-                  </Button>
-                </div>
+                
                 
                 <Separator />
                 
