@@ -46,14 +46,18 @@ const Donations = () => {
             </CardHeader>
             <CardContent className="flex-grow">
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <Button variant="outline" className="w-full">$5</Button>
-                <Button variant="outline" className="w-full">$10</Button>
-                <Button variant="outline" className="w-full">$25</Button>
-                <Button variant="outline" className="w-full">$50</Button>
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="https://mpago.la/2kn5NJJ" target="_blank">$ 100,00</Link>
+                </Button>
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="https://mpago.la/1URfE2T" target="_blank">$ 250,00</Link>
+                </Button>
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Donar Mensualmente</Button>
+              <Button asChild className="w-full">
+                <Link to="https://mpago.la/2kn5NJJ" target="_blank">Donar Mensualmente</Link>
+              </Button>
             </CardFooter>
           </Card>
 
@@ -81,11 +85,6 @@ const Donations = () => {
                 </Button>
               </div>
             </CardContent>
-            <CardFooter>
-              <Button asChild className="w-full">
-                <Link to="https://mpago.la/2CnyxoJ" target="_blank">Donar Ahora</Link>
-              </Button>
-            </CardFooter>
           </Card>
 
           <Card className="flex flex-col">
@@ -112,8 +111,10 @@ const Donations = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button variant="outline" className="w-full" onClick={() => handleCopy('cristophelico@gmail.com', 'PayPal')}>
-                Copiar Email PayPal
+              <Button asChild variant="outline" className="w-full">
+                <Link to="https://www.paypal.com/paypalme/cristophelico" target="_blank">
+                  Donar con Pay Pal
+                </Link>
               </Button>
             </CardFooter>
           </Card>

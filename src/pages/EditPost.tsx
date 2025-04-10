@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import { useAuth } from '@/contexts/AuthContext';
@@ -138,6 +139,8 @@ const EditPost = () => {
         category: values.category,
         address: values.address || `Lat: ${location.lat.toFixed(6)}, Lng: ${location.lng.toFixed(6)}`,
         image_url: imageUrl || null,
+        lat: location.lat,
+        lng: location.lng
       };
       
       if (canEdit) {
