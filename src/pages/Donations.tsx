@@ -132,11 +132,11 @@ const Donations = () => {
               <div className="space-y-6">
                 
                 
-                <Separator />
                 
                 
                 
-                <Separator />
+                
+                
                 
                 <div>
                   <div className="flex items-center gap-2 mb-2">
