@@ -67,13 +67,13 @@ const Footer = () => {
           <h3 className="font-semibold text-lg mb-4">Recursos</h3>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="text-white/80 hover:text-white">
-                Guía de reciclaje
+              <a href="https://www.argentina.gob.ar/argentina-recicla" className="text-white/80 hover:text-white">
+                Argentina Recicla
               </a>
             </li>
             <li>
-              <a href="#" className="text-white/80 hover:text-white">
-                Tipos de residuos
+              <a href="https://www.argentina.gob.ar/sites/default/files/manual_pedagogia_mds_2_1.pdf" className="text-white/80 hover:text-white">
+                Aprender de los residuos
               </a>
             </li>
             <li>
