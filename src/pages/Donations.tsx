@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,7 +6,6 @@ import { Separator } from '@/components/ui/separator';
 import { Heart, DollarSign, CreditCard, Bitcoin, Euro } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
 import { Link } from 'react-router-dom';
-
 const Donations = () => {
   // Función para copiar datos
   const handleCopy = (text: string, type: string) => {
@@ -24,7 +22,6 @@ const Donations = () => {
     ethereum: "0x850ed63ae1f72902543bc665311fe95e19a02c8f",
     usdt: "0x850ed63ae1f72902543bc665311fe95e19a02c8f"
   };
-  
   return <Layout>
       <div className="container py-12 px-4 md:px-6">
         <div className="text-center mb-8">
@@ -133,16 +130,7 @@ const Donations = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <Bitcoin size={20} className="text-amber-500" />
-                    <h3 className="font-medium">Bitcoin (BTC)</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground font-mono break-all">{cryptoAddresses.bitcoin}</p>
-                  <Button variant="outline" size="sm" className="mt-2" onClick={() => handleCopy(cryptoAddresses.bitcoin, 'Bitcoin')}>
-                    Copiar dirección
-                  </Button>
-                </div>
+                
                 
                 <Separator />
                 
