@@ -295,7 +295,7 @@ const Index: React.FC = () => {
                   variant="outline"
                   asChild
                 >
-                  <a href="/about">Saber Más</a>
+                  <a href="/donations">Donaciones</a>
                 </Button>
               </div>
             </div>
