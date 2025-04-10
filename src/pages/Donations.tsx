@@ -53,7 +53,7 @@ const Donations = () => {
             </CardContent>
             <CardFooter>
               <Button asChild className="w-full">
-                <Link to="https://mpago.la/2kn5NJJ" target="_blank">Donar Mensualmente</Link>
+                
               </Button>
             </CardFooter>
           </Card>
