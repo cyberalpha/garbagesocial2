@@ -50,34 +50,55 @@ const PostRatingDialog: React.FC<PostRatingDialogProps> = ({
       
       // Create a type for the updateProfileData object with index signature
       // This allows us to dynamically set the field based on the rating
-      const updateProfileData: { [key: string]: any } = {};
-      updateProfileData[ratingField] = supabase.rpc('increment', { count: 1 });
+const handleCompleteCollection = async (rating: 'positive' | 'neutral' | 'negative') => {
+  if (!claimedBy) return;
+  
+  try {
+    setLoading(true);
+    
+    const updateData: Record<string, any> = {
+      status: 'collected',
+      publisher_rating: rating
+    };
+    
+    const { error } = await supabase
+      .from('posts')
+      .update(updateData)
+      .eq('id', postId);
       
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .update(updateProfileData)
-        .eq('id', claimedBy);
-        
-      if (profileError) throw profileError;
+    if (error) throw error;
+    
+    const ratingField = `${rating}_ratings`;
+    
+    // Corrección: Define el tipo del objeto updateProfileData
+    const updateProfileData: Record<string, any> = {};
+    updateProfileData[ratingField] = supabase.rpc('increment', { count: 1 });
+    
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .update(updateProfileData)
+      .eq('id', claimedBy);
       
-      toast({
-        title: "Recolección completada",
-        description: "Gracias por contribuir al reciclaje",
-      });
-      
-      onOpenChange(false);
-      onRefresh();
-    } catch (error: any) {
-      console.error("Error completing collection:", error);
-      toast({
-        title: "Error",
-        description: error.message || 'Error al completar la recolección',
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+    if (profileError) throw profileError;
+    
+    toast({
+      title: "Recolección completada",
+      description: "Gracias por contribuir al reciclaje",
+    });
+    
+    onOpenChange(false);
+    onRefresh();
+  } catch (error: any) {
+    console.error("Error completing collection:", error);
+    toast({
+      title: "Error",
+      description: error.message || 'Error al completar la recolección',
+      variant: "destructive",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
