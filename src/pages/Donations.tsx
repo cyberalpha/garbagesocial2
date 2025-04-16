@@ -218,7 +218,7 @@ const Donations = () => {
           <h2 className="text-2xl font-semibold mb-6 text-center">Compra la criptomoneda XTOF</h2>
           <Card>
             <CardHeader>
-              <Bitcoin className="w-12 h-12 text-purple-500 mx-auto mb-4" />
+              <Bitcoin className="w-12 h-12 text-green-500 mx-auto mb-4" />
               <CardTitle className="text-center">Nuestra Criptomoneda Nativa</CardTitle>
               <CardDescription className="text-center">
                 ¿Quieres apoyarnos comprando nuestra criptomoneda nativa?
