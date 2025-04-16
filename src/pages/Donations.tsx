@@ -231,7 +231,7 @@ const Donations = () => {
                   className="mt-4 bg-purple-600 hover:bg-purple-700"
                   asChild
                 >
-                  <Link to="https://pancakeswap.finance/swap" target="_blank">
+                  <Link to="https://pancakeswap.finance/swap?inputCurrency=0x55d398326f99059fF775485246999027B3197955&outputCurrency=0x5B015aE60Fe3CdAe53eead9aaC0c500b8298126D" target="_blank">
                     Comprar XTOF
                   </Link>
                 </Button>
