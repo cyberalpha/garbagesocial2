@@ -1,9 +1,10 @@
+
 import React from 'react';
 import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Heart, DollarSign, CreditCard, Bitcoin, Euro } from 'lucide-react';
+import { Heart, DollarSign, CreditCard, Bitcoin, Euro, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
 import { Link } from 'react-router-dom';
 const Donations = () => {
@@ -16,11 +17,44 @@ const Donations = () => {
     });
   };
 
+  // Función para compartir en redes sociales
+  const handleShare = (platform: string) => {
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent("Apoya a Garbage Social y ayúdanos a mejorar el medio ambiente");
+    
+    let shareUrl = '';
+    
+    switch (platform) {
+      case 'facebook':
+        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+        break;
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+        break;
+      case 'linkedin':
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+        break;
+      case 'instagram':
+        // Instagram no tiene una API directa de compartir, mostramos un toast con instrucciones
+        toast({
+          title: "Compartir en Instagram",
+          description: "Instagram no permite compartir directamente. Copia el enlace y compártelo manualmente."
+        });
+        navigator.clipboard.writeText(window.location.href);
+        return;
+    }
+    
+    if (shareUrl) {
+      window.open(shareUrl, '_blank');
+    }
+  };
+
   // Datos de criptomonedas
   const cryptoAddresses = {
     bitcoin: "0x850ed63ae1f72902543bc665311fe95e19a02c8f",
     ethereum: "0x850ed63ae1f72902543bc665311fe95e19a02c8f",
-    usdt: "0x850ed63ae1f72902543bc665311fe95e19a02c8f"
+    usdt: "0x850ed63ae1f72902543bc665311fe95e19a02c8f",
+    xtof: "0x5B015aE60Fe3CdAe53eead9aaC0c500b8298126D"
   };
   return <Layout>
       <div className="container py-12 px-4 md:px-6">
@@ -174,6 +208,83 @@ const Donations = () => {
                     Copiar dirección
                   </Button>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Nueva sección XTOF */}
+        <div className="mt-12 max-w-3xl mx-auto">
+          <h2 className="text-2xl font-semibold mb-6 text-center">Compra la criptomoneda XTOF</h2>
+          <Card>
+            <CardHeader>
+              <Bitcoin className="w-12 h-12 text-purple-500 mx-auto mb-4" />
+              <CardTitle className="text-center">Nuestra Criptomoneda Nativa</CardTitle>
+              <CardDescription className="text-center">
+                ¿Quieres apoyarnos comprando nuestra criptomoneda nativa?
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4 text-center">
+                <p className="text-sm text-muted-foreground font-mono break-all">{cryptoAddresses.xtof}</p>
+                <Button 
+                  className="mt-4 bg-purple-600 hover:bg-purple-700"
+                  asChild
+                >
+                  <Link to="https://pancakeswap.finance/swap" target="_blank">
+                    Comprar XTOF
+                  </Link>
+                </Button>
+                <p className="text-xs text-muted-foreground italic mt-2">
+                  (Serás redirigido a PancakeSwap para realizar la compra.)
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Nueva sección compartir */}
+        <div className="mt-12 max-w-3xl mx-auto">
+          <h2 className="text-2xl font-semibold mb-6 text-center">Comparte esta iniciativa</h2>
+          <Card>
+            <CardContent className="py-6">
+              <div className="text-center">
+                <p className="mb-6">
+                  Ayúdanos a llegar a más personas compartiendo esta página en tus redes sociales:
+                </p>
+                <div className="flex justify-center gap-6">
+                  <button 
+                    onClick={() => handleShare('facebook')}
+                    className="text-blue-600 hover:text-blue-800 transition-colors"
+                    aria-label="Compartir en Facebook"
+                  >
+                    <Facebook size={32} />
+                  </button>
+                  <button 
+                    onClick={() => handleShare('instagram')}
+                    className="text-pink-600 hover:text-pink-800 transition-colors"
+                    aria-label="Compartir en Instagram"
+                  >
+                    <Instagram size={32} />
+                  </button>
+                  <button 
+                    onClick={() => handleShare('twitter')}
+                    className="text-blue-400 hover:text-blue-600 transition-colors"
+                    aria-label="Compartir en Twitter"
+                  >
+                    <Twitter size={32} />
+                  </button>
+                  <button 
+                    onClick={() => handleShare('linkedin')}
+                    className="text-blue-700 hover:text-blue-900 transition-colors"
+                    aria-label="Compartir en LinkedIn"
+                  >
+                    <Linkedin size={32} />
+                  </button>
+                </div>
+                <p className="text-xs text-muted-foreground italic mt-4">
+                  (Haz clic en los íconos para compartir directamente en cada plataforma.)
+                </p>
               </div>
             </CardContent>
           </Card>
