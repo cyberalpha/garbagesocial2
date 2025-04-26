@@ -46,17 +46,17 @@ const PostRatingDialog: React.FC<PostRatingDialogProps> = ({
         
       if (error) throw error;
       
-      const ratingField = `${rating}_ratings`;
+      // Create a properly typed function to handle the rating update
+      const updateRatingCount = async (userId: string, ratingType: string) => {
+        const { error } = await supabase.rpc('increment', { count: 1 })
+          .from('profiles')
+          .update({ [ratingType]: supabase.sql`${ratingType} + 1` })
+          .eq('id', userId);
+        return { error };
+      };
       
-      // Define a type-safe update object with string index signature
-      const updateProfileData: Record<string, any> = {};
-      // Use type assertion to handle the dynamic field setting
-      updateProfileData[ratingField] = supabase.rpc('increment', { count: 1 });
-      
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .update(updateProfileData)
-        .eq('id', claimedBy);
+      // Call the function with the right parameters
+      const { error: profileError } = await updateRatingCount(claimedBy, `${rating}_ratings`);
         
       if (profileError) throw profileError;
       
