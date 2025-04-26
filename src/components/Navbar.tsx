@@ -31,6 +31,11 @@ const Navbar = () => {
     { name: 'Donaciones', path: '/donations' },
   ];
   
+  const handleSignOut = (e: React.MouseEvent) => {
+    e.preventDefault();
+    signOut();
+  };
+  
   const renderNavLinks = () => (
     <>
       {navLinks.map((link) => (
@@ -46,6 +51,17 @@ const Navbar = () => {
           {link.name}
         </Link>
       ))}
+      
+      {/* Add logout option in mobile menu if user is logged in */}
+      {isMobile && user && (
+        <button
+          onClick={handleSignOut}
+          className="text-sm font-medium transition-colors hover:text-white/90 text-white/70 flex items-center"
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          <span>Cerrar sesión</span>
+        </button>
+      )}
     </>
   );
 
@@ -101,7 +117,7 @@ const Navbar = () => {
                       <span>Perfil</span>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={signOut}>
+                  <DropdownMenuItem onClick={handleSignOut}>
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Cerrar sesión</span>
                   </DropdownMenuItem>
