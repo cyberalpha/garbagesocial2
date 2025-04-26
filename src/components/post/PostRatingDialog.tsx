@@ -46,11 +46,18 @@ const PostRatingDialog: React.FC<PostRatingDialogProps> = ({
         
       if (error) throw error;
       
-      // Update the rating count using a direct update with increment
-      const ratingColumn = `${rating}_ratings`;
+      const ratingField = `${rating}_ratings`;
+      
+      // Create a type for the updateProfileData object with index signature
+      // This allows us to dynamically set the field based on the rating
+      // Define el tipo del objeto updateProfileData
+      const updateProfileData: Record<string, any> = {};
+      // Asigna dinámicamente la clave ratingField
+      updateProfileData[ratingField] = supabase.rpc('increment', { count: 1 });
+      
       const { error: profileError } = await supabase
         .from('profiles')
-        .update({ [ratingColumn]: supabase.rpc('increment', { count: 1 }) })
+        .update(updateProfileData)
         .eq('id', claimedBy);
         
       if (profileError) throw profileError;
