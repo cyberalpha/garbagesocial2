@@ -46,17 +46,12 @@ const PostRatingDialog: React.FC<PostRatingDialogProps> = ({
         
       if (error) throw error;
       
-      // Create a properly typed function to handle the rating update
-      const updateRatingCount = async (userId: string, ratingType: string) => {
-        const { error } = await supabase.rpc('increment', { count: 1 })
-          .from('profiles')
-          .update({ [ratingType]: supabase.sql`${ratingType} + 1` })
-          .eq('id', userId);
-        return { error };
-      };
-      
-      // Call the function with the right parameters
-      const { error: profileError } = await updateRatingCount(claimedBy, `${rating}_ratings`);
+      // Update the rating count directly using a proper update operation
+      const ratingColumn = `${rating}_ratings`;
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({ [ratingColumn]: supabase.rpc('increment_counter', { x: 1 }) })
+        .eq('id', claimedBy);
         
       if (profileError) throw profileError;
       
