@@ -46,13 +46,26 @@ const PostRatingDialog: React.FC<PostRatingDialogProps> = ({
         
       if (error) throw error;
       
-      // Fixed approach: Use a direct update with an increment expression
-      // This avoids type issues with the previous approach
+      // Fixed approach: First get the current rating value, then update with incremented value
       const ratingField = `${rating}_ratings`;
       
+      // Get current value of the profile's rating
+      const { data: profileData, error: fetchError } = await supabase
+        .from('profiles')
+        .select(ratingField)
+        .eq('id', claimedBy)
+        .single();
+        
+      if (fetchError) throw fetchError;
+      
+      // Calculate the new rating value
+      const currentValue = profileData?.[ratingField] || 0;
+      const newValue = currentValue + 1;
+      
+      // Update with the new incremented value
       const { error: profileError } = await supabase
         .from('profiles')
-        .update({ [ratingField]: supabase.sql`${ratingField} + 1` })
+        .update({ [ratingField]: newValue })
         .eq('id', claimedBy);
         
       if (profileError) throw profileError;
@@ -124,3 +137,4 @@ const PostRatingDialog: React.FC<PostRatingDialogProps> = ({
 };
 
 export default PostRatingDialog;
+
