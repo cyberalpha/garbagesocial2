@@ -18,18 +18,11 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "jquery": path.resolve(__dirname, "node_modules/jquery")
     },
-  },
-  optimizeDeps: {
-    include: ['jquery']
   },
   build: {
     commonjsOptions: {
       include: [/jquery/, /node_modules/]
-    },
-    rollupOptions: {
-      external: [],
     }
   }
 }));
