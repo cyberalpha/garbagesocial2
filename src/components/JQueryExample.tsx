@@ -1,45 +1,31 @@
 
-import React, { useEffect, useRef } from 'react';
-// Use a dynamic import approach for jQuery
+import React, { useEffect, useState } from 'react';
+
 const JQueryExample: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
   
   useEffect(() => {
-    // Dynamically import jQuery to avoid build issues
-    const loadJQuery = async () => {
-      try {
-        const jquery = await import('jquery');
-        const $ = jquery.default;
-        
-        // Once jQuery is loaded, apply effects
-        if (containerRef.current) {
-          $(containerRef.current).fadeIn('slow');
-        }
-        
-        // Also use other jQuery functionalities
-        $(document).ready(function() {
-          console.log('Document ready using jQuery!');
-        });
-      } catch (error) {
-        console.error("Failed to load jQuery:", error);
-      }
-    };
+    // Simulamos el efecto fadeIn con un pequeño retraso
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 300);
     
-    loadJQuery();
+    console.log('Documento listo usando React!');
     
-    // Clean up effects when component unmounts
+    // Limpieza cuando el componente se desmonta
     return () => {
-      // Clean up will be handled automatically by React
+      clearTimeout(timer);
     };
   }, []);
 
   return (
     <div 
-      ref={containerRef} 
-      className="jquery-example p-4 bg-slate-100 rounded-md hidden"
+      className={`p-4 bg-slate-100 rounded-md transition-opacity duration-1000 ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
     >
-      <h2 className="text-xl font-bold mb-2">Ejemplo de jQuery</h2>
-      <p>Este elemento apareció con un efecto fade usando jQuery.</p>
+      <h2 className="text-xl font-bold mb-2">Ejemplo de React</h2>
+      <p>Este elemento apareció con un efecto fade usando React y CSS.</p>
     </div>
   );
 };
