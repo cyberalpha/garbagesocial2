@@ -2,6 +2,7 @@
 import React from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import JQueryExample from './JQueryExample';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,6 +14,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Navbar />
       <main className="flex-grow">
         {children}
+        <div className="container mx-auto py-4">
+          <JQueryExample />
+        </div>
       </main>
       <Footer />
     </div>
