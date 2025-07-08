@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -29,6 +28,7 @@ const Navbar = () => {
     { name: 'Mapa', path: '/map' },
     { name: 'Acerca de', path: '/about' },
     { name: 'Donaciones', path: '/donations' },
+    { name: 'Validaciones', path: '/system-check' },
   ];
   
   const renderNavLinks = () => (
