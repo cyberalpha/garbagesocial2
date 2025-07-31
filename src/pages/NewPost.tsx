@@ -50,11 +50,27 @@ const postSchema = z.object({
 type PostFormValues = z.infer<typeof postSchema>;
 
 const NewPost = () => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [imageUrl, setImageUrl] = useState<string>('');
+
+  // Redireccionar si no hay usuario
+  if (authLoading) {
+    return (
+      <Layout>
+        <div className="container py-10 max-w-2xl">
+          <div className="text-center">Cargando...</div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!user) {
+    navigate('/auth');
+    return null;
+  }
 
   // Formulario de nueva publicación
   const form = useForm<PostFormValues>({
@@ -192,7 +208,7 @@ const NewPost = () => {
                   <FormLabel htmlFor="image">Imagen (opcional)</FormLabel>
                   <ImageUpload
                     bucketName="post_images"
-                    folderPath={user!.id}
+                    folderPath={user.id}
                     onImageUploaded={setImageUrl}
                     className="mt-1"
                   />
