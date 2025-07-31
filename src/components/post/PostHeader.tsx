@@ -3,7 +3,7 @@ import React from 'react';
 import { CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import CategoryBadge from '@/components/CategoryBadge';
-import { Edit } from 'lucide-react';
+import { Edit, Trash2 } from 'lucide-react';
 import { WasteCategory } from '@/types';
 
 interface PostHeaderProps {
@@ -11,13 +11,15 @@ interface PostHeaderProps {
   category: WasteCategory;
   canEditPost: boolean;
   onEdit: () => void;
+  onDelete: () => void;
 }
 
 const PostHeader: React.FC<PostHeaderProps> = ({
   title,
   category,
   canEditPost,
-  onEdit
+  onEdit,
+  onDelete
 }) => {
   return (
     <div className="flex justify-between items-start">
@@ -29,14 +31,24 @@ const PostHeader: React.FC<PostHeaderProps> = ({
       </div>
       
       {canEditPost && (
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={onEdit}
-        >
-          <Edit className="h-4 w-4 mr-1" />
-          Editar
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            variant="destructive" 
+            size="sm" 
+            onClick={onDelete}
+          >
+            <Trash2 className="h-4 w-4 mr-1" />
+            Eliminar
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={onEdit}
+          >
+            <Edit className="h-4 w-4 mr-1" />
+            Editar
+          </Button>
+        </div>
       )}
     </div>
   );

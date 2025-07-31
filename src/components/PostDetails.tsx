@@ -104,14 +104,50 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
     }
   };
 
+  const handleDeletePost = async () => {
+    if (!user || post.userId !== user.id) return;
+
+    const confirmDelete = window.confirm('¿Estás seguro de que deseas eliminar esta publicación? Esta acción no se puede deshacer.');
+    if (!confirmDelete) return;
+
+    setLoading(true);
+    try {
+      const { error } = await supabase
+        .from('posts')
+        .delete()
+        .eq('id', post.id)
+        .eq('user_id', user.id); // Extra seguridad para asegurar que solo el dueño puede eliminar
+
+      if (error) throw error;
+
+      toast({
+        title: "¡Éxito!",
+        description: "La publicación ha sido eliminada correctamente.",
+      });
+
+      // Redirigir a la página principal después de eliminar
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar la publicación. Inténtalo de nuevo.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
-        <PostHeader 
+        <PostHeader
           title={post.title}
           category={post.category}
           canEditPost={canEditPost}
           onEdit={() => setShowEditDialog(true)}
+          onDelete={handleDeletePost}
         />
       </CardHeader>
       
