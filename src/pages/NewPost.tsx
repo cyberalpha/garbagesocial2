@@ -56,23 +56,7 @@ const NewPost = () => {
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [imageUrl, setImageUrl] = useState<string>('');
 
-  // Redireccionar si no hay usuario
-  if (authLoading) {
-    return (
-      <Layout>
-        <div className="container py-10 max-w-2xl">
-          <div className="text-center">Cargando...</div>
-        </div>
-      </Layout>
-    );
-  }
-
-  if (!user) {
-    navigate('/auth');
-    return null;
-  }
-
-  // Formulario de nueva publicación
+  // Formulario de nueva publicación - SIEMPRE debe ejecutarse
   const form = useForm<PostFormValues>({
     resolver: zodResolver(postSchema),
     defaultValues: {
@@ -130,6 +114,22 @@ const NewPost = () => {
     } finally {
       setLoading(false);
     }
+  }
+
+  // Verificaciones de autenticación DESPUÉS de todos los hooks
+  if (authLoading) {
+    return (
+      <Layout>
+        <div className="container py-10 max-w-2xl">
+          <div className="text-center">Cargando...</div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!user) {
+    navigate('/auth');
+    return null;
   }
 
   return (
