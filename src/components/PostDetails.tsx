@@ -46,20 +46,26 @@ const PostDetails: React.FC<PostDetailsProps> = ({ post, onRefresh }) => {
   }, []);
 
   useEffect(() => {
-    if (!currentLocation || !window.google || !window.google.maps) return;
+    if (!currentLocation || !window.google || !window.google.maps || !window.google.maps.geometry) return;
     
     const calculateDistance = () => {
-      const origin = new window.google.maps.LatLng(currentLocation.lat, currentLocation.lng);
-      const destination = new window.google.maps.LatLng(post.location.lat, post.location.lng);
-      
-      const distance = window.google.maps.geometry.spherical.computeDistanceBetween(origin, destination);
-      return distance; // en metros
+      try {
+        const origin = new window.google.maps.LatLng(currentLocation.lat, currentLocation.lng);
+        const destination = new window.google.maps.LatLng(post.location.lat, post.location.lng);
+        
+        const distance = window.google.maps.geometry.spherical.computeDistanceBetween(origin, destination);
+        return distance; // en metros
+      } catch (error) {
+        console.error('Error calculating distance:', error);
+        return null;
+      }
     };
 
     const distance = calculateDistance();
-    setDistanceToPost(distance);
-    
-    setCanComplete(distance < 100);
+    if (distance !== null) {
+      setDistanceToPost(distance);
+      setCanComplete(distance < 100);
+    }
   }, [currentLocation, post]);
 
   const handleClaimPost = async () => {
